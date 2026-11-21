@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;700&display=block');
+
+:root { --bg:#000; --fg:#fff; --red:#FF2A1F; --dim:#8C8C8C; --line:#2E2E2E; }
+body.light { --bg:#fff; --fg:#000; --dim:#6B6B6B; --line:#D6D6D6; }
+
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { width:393px; height:873px; overflow:hidden; background:var(--bg); color:var(--fg); }
+body { font-family:'Space Grotesk', 'Helvetica Neue', sans-serif; -webkit-font-smoothing:antialiased; position:relative; }
+.mono { font-family:'JetBrains Mono', ui-monospace, monospace; }
+
+/* system bar */
+.status { height:40px; padding:0 20px; display:flex; align-items:center; justify-content:space-between;
+  font:500 12px 'JetBrains Mono', monospace; letter-spacing:.5px; }
+.status .sig { display:flex; gap:3px; align-items:flex-end; }
+.status .sig i { width:3px; background:var(--fg); display:block; }
+
+.screen { padding:8px 20px 24px; height:833px; display:flex; flex-direction:column; }
+.grow { flex:1; }
+
+/* type */
+h1 { font:400 46px/0.92 'Archivo Black', 'Helvetica Neue', sans-serif; text-transform:uppercase; letter-spacing:-1.5px; }
+h2 { font:400 26px/1 'Archivo Black', sans-serif; text-transform:uppercase; letter-spacing:-0.5px; }
+.label { font:500 11px 'JetBrains Mono', monospace; letter-spacing:1.6px; text-transform:uppercase; color:var(--dim); }
+.body { font:400 15px/1.4 'Space Grotesk', sans-serif; color:var(--dim); }
+.name { font:700 16px 'Space Grotesk', sans-serif; text-transform:uppercase; letter-spacing:.6px; }
+.red { color:var(--red) !important; }
+
+/* blocks */
+.hr { height:2px; background:var(--fg); }
+.row { border-top:1px solid var(--line); padding:14px 0; display:flex; gap:14px; align-items:center; }
+.row:last-child { border-bottom:1px solid var(--line); }
+.icon { width:40px; height:40px; flex:none; border:2px solid var(--fg); display:grid; place-items:center;
+  font:400 18px 'Archivo Black', sans-serif; filter:grayscale(1); }
+.icon.fill { background:var(--fg); color:var(--bg); }
+.icon.locked { border-color:var(--red); color:var(--red); filter:none; }
+
+.btn { height:56px; border:2px solid var(--fg); display:flex; align-items:center; justify-content:center; gap:10px;
+  font:700 14px 'JetBrains Mono', monospace; letter-spacing:2.4px; text-transform:uppercase; }
+.btn.primary { background:var(--fg); color:var(--bg); }
+.btn.danger { border-color:var(--red); color:var(--red); }
+.btn.sm { height:40px; font-size:12px; letter-spacing:1.8px; padding:0 14px; }
+.btn.ghost { border-color:var(--dim); color:var(--dim); }
+.btns { display:flex; gap:10px; } .btns > * { flex:1; }
+
+.box { border:2px solid var(--fg); padding:16px; }
+.box.red { border-color:var(--red); }
+
+.check { width:24px; height:24px; flex:none; border:2px solid var(--fg); display:grid; place-items:center;
+  font:800 14px 'JetBrains Mono', monospace; color:var(--bg); }
+.check.on { background:var(--fg); }
+
+.bar { display:flex; gap:2px; height:10px; margin-top:8px; }
+.bar i { flex:1; border:1px solid var(--fg); display:block; }
+.bar i.on { background:var(--fg); }
+.bar.red i { border-color:var(--red); } .bar.red i.on { background:var(--red); }
+
+.step { display:flex; align-items:stretch; height:36px; border:2px solid var(--fg); }
+.step span { width:34px; display:grid; place-items:center; font:700 16px 'JetBrains Mono', monospace; }
+.step b { min-width:46px; display:grid; place-items:center; font:700 14px 'JetBrains Mono', monospace;
+  border-left:2px solid var(--fg); border-right:2px solid var(--fg); }
+
+.input { height:52px; border:2px solid var(--fg); display:flex; align-items:center; gap:10px; padding:0 14px;
+  font:500 14px 'JetBrains Mono', monospace; letter-spacing:1.2px; color:var(--dim); text-transform:uppercase; }
+.cursor { display:inline-block; width:9px; height:18px; background:var(--fg); vertical-align:-3px; }
+
+.scrim { position:absolute; inset:0; background:rgba(0,0,0,.78); }
+body.light .scrim { background:rgba(255,255,255,.82); }
+
+/* real-style launcher icons */
+.icon.app { border:none; padding:0; filter:grayscale(1); }
+.icon.app svg { display:block; }
+.icon.app.locked { filter:none; outline:2px solid var(--red); outline-offset:3px; }
+.icon.app.locked svg { opacity:.35; filter:grayscale(1); }

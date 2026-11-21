@@ -1,0 +1,58 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="clamp.css">
+<style>
+  .tabs { display:flex; border:2px solid var(--fg); margin-top:18px; }
+  .tabs div { flex:1; height:42px; display:grid; place-items:center; font:700 12px 'JetBrains Mono',monospace; letter-spacing:1.8px; text-transform:uppercase; }
+  .tabs div.on { background:var(--fg); color:var(--bg); }
+  .num { width:24px; height:24px; flex:none; display:grid; place-items:center; font:800 12px 'JetBrains Mono',monospace; border:2px solid var(--fg); }
+  .num.done { background:var(--fg); color:var(--bg); }
+  .num.now { border-color:var(--fg); outline:2px solid var(--fg); outline-offset:2px; }
+  .num.todo { border-color:var(--dim); color:var(--dim); }
+</style></head>
+<body>
+<div class="status"></div>
+<div class="screen">
+  <div class="label" style="margin-top:12px">Setup · 02 / 02</div>
+  <h1 style="margin-top:14px">Lock it.</h1>
+  <p class="body" style="margin-top:12px">Once active, Enough can't be uninstalled. Loosening anything takes 24h.</p>
+
+  <div style="margin-top:14px">
+    <div class="row" style="padding:10px 0">
+      <div class="check on">✓</div><div class="grow"><div class="name" style="font-size:14px">Usage access</div></div>
+      <div class="check on">✓</div><div class="name" style="font-size:14px">Autostart</div>
+      <div class="check on">✓</div><div class="name" style="font-size:14px">Battery</div>
+    </div>
+  </div>
+
+  <div class="tabs"><div class="on">On this phone</div><div>With a computer</div></div>
+
+  <div style="margin-top:6px">
+    <div class="row">
+      <div class="num done">✓</div>
+      <div class="grow"><div class="name">Remove all accounts</div><div class="label" style="margin-top:4px">Mi + Google · add back after</div></div>
+    </div>
+    <div class="row">
+      <div class="num done">✓</div>
+      <div class="grow"><div class="name">Wireless debugging on</div><div class="label" style="margin-top:4px">Developer options · Wi-Fi needed</div></div>
+    </div>
+    <div class="row">
+      <div class="num now">3</div>
+      <div class="grow"><div class="name">Pair with code</div><div class="label" style="margin-top:4px;color:var(--fg)">Pair with code → type it<br>in Enough's notification</div></div>
+      <div class="btn sm">Open</div>
+    </div>
+    <div class="row">
+      <div class="num todo">4</div>
+      <div class="grow"><div class="name" style="color:var(--dim)">Activate</div><div class="label" style="margin-top:4px">automatic · debugging turned off after</div></div>
+    </div>
+  </div>
+
+  <div class="grow"></div>
+  <div class="box" style="padding:12px 14px">
+    <div class="mono" style="font-size:12px;line-height:1.8;color:var(--dim)">
+      <span style="color:var(--fg)">■</span> found pairing service · 127.0.0.1:37145<br>
+      <span style="color:var(--fg)">■</span> waiting for code<span class="cursor" style="width:7px;height:13px;margin-left:4px;vertical-align:-2px"></span>
+    </div>
+  </div>
+  <div class="label" style="margin-top:10px;text-align:center">Local only · Enough never talks to the internet</div>
+</div>
+<script src="clamp.js"></script>
+</body></html>

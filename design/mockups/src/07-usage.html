@@ -1,0 +1,86 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="clamp.css">
+<style>
+  .days { display:flex; gap:6px; align-items:flex-end; height:150px; margin-top:14px; border-bottom:2px solid var(--fg); padding-bottom:0; }
+  .day { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .day .b { width:100%; background:transparent; border:2px solid var(--fg); border-bottom:none; }
+  .day.sel .b { background:var(--fg); }
+  .day .v { font:700 10px 'JetBrains Mono',monospace; margin-bottom:4px; color:var(--dim); }
+  .day.sel .v { color:var(--fg); }
+  .dl { display:flex; gap:6px; margin-top:6px; }
+  .dl div { flex:1; text-align:center; font:700 11px 'JetBrains Mono',monospace; letter-spacing:1px; color:var(--dim); }
+  .dl div.sel { color:var(--fg); }
+  .lim { font:800 10px 'JetBrains Mono',monospace; letter-spacing:1.2px; border:1.5px solid var(--fg); padding:2px 5px; }
+  .lim.red { border-color:var(--red); color:var(--red); }
+  .add { font:700 11px 'JetBrains Mono',monospace; letter-spacing:1.4px; color:var(--dim); }
+  .spark { display:flex; gap:2px; align-items:flex-end; height:22px; width:70px; }
+  .spark i { flex:1; background:var(--fg); display:block; }
+  .spark i.t { background:var(--fg); outline:1px solid var(--fg); }
+  .spark.red i { background:var(--red); }
+  .trend { font:800 10px 'JetBrains Mono',monospace; letter-spacing:1px; min-width:44px; text-align:right; }
+</style></head>
+<body>
+<div class="status"></div>
+<div class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+    <h2 style="font-size:30px">Enough</h2>
+    <div class="mono" style="font-size:20px;letter-spacing:2px">▪▪</div>
+  </div>
+  <div class="label" style="margin-top:6px">Sat 21 Nov · active</div>
+
+  <div style="display:flex;border:2px solid var(--fg);margin-top:18px">
+    <div style="flex:1;height:40px;display:grid;place-items:center;font:700 12px 'JetBrains Mono',monospace;letter-spacing:1.8px">LIMITS</div>
+    <div style="flex:1;height:40px;display:grid;place-items:center;background:var(--fg);color:var(--bg);font:700 12px 'JetBrains Mono',monospace;letter-spacing:1.8px">USAGE</div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:18px">
+    <span class="label">Last 7 days · avg 5H 40M</span>
+    <span class="mono" style="font-size:12px;font-weight:800;letter-spacing:1px">▼ 12% <span style="color:var(--dim);font-weight:500">VS PREV 7D</span></span>
+  </div>
+  <div class="days" style="position:relative">
+    <div style="position:absolute;left:0;right:0;bottom:66%;border-top:2px dashed var(--dim)"></div><div class="label" style="position:absolute;right:0;bottom:calc(66% + 4px);font-size:9px">AVG</div>
+    <div class="day"><div class="v">4H</div><div class="b" style="height:52%"></div></div>
+    <div class="day"><div class="v">7H</div><div class="b" style="height:88%"></div></div>
+    <div class="day"><div class="v">5H</div><div class="b" style="height:63%"></div></div>
+    <div class="day"><div class="v">6H</div><div class="b" style="height:74%"></div></div>
+    <div class="day"><div class="v">3H</div><div class="b" style="height:40%"></div></div>
+    <div class="day"><div class="v">8H</div><div class="b" style="height:100%"></div></div>
+    <div class="day sel"><div class="v">6H</div><div class="b" style="height:77%"></div></div>
+  </div>
+  <div class="dl"><div>SU</div><div>MO</div><div>TU</div><div>WE</div><div>TH</div><div>FR</div><div class="sel">TODAY</div></div>
+
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:20px">
+    <span class="label" style="color:var(--fg)">Today · 6H 12M</span><span class="label">by app</span>
+  </div>
+  <div style="margin-top:6px">
+    <div class="row">
+      <div class="icon app locked" data-app="youtube"></div>
+      <div class="grow">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="name red">YouTube</span><span class="mono red" style="font-size:13px;font-weight:800">4H 01M</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="lim red">LIMIT 10M · LOCKED</span><span style="display:flex;gap:8px;align-items:center"><span class="spark red"><i style="height:30%"></i><i style="height:55%"></i><i style="height:40%"></i><i style="height:70%"></i><i style="height:35%"></i><i style="height:90%"></i><i style="height:100%"></i></span><span class="trend" style="color:var(--red)">▲ 34%</span></span></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="icon app" data-app="chrome"></div>
+      <div class="grow">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="name">Chrome</span><span class="mono" style="font-size:13px;font-weight:800">58M</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="add">+ SET LIMIT</span><span style="display:flex;gap:8px;align-items:center"><span class="spark "><i style="height:60%"></i><i style="height:40%"></i><i style="height:55%"></i><i style="height:70%"></i><i style="height:50%"></i><i style="height:45%"></i><i style="height:58%"></i></span><span class="trend" style="color:var(--fg)">▼ 8%</span></span></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="icon app" data-app="reddit"></div>
+      <div class="grow">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="name">Reddit</span><span class="mono" style="font-size:13px;font-weight:800">42M</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="lim">LIMIT 15M</span><span style="display:flex;gap:8px;align-items:center"><span class="spark "><i style="height:90%"></i><i style="height:80%"></i><i style="height:70%"></i><i style="height:60%"></i><i style="height:50%"></i><i style="height:45%"></i><i style="height:42%"></i></span><span class="trend" style="color:var(--fg)">▼ 41%</span></span></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="icon app" data-app="x"></div>
+      <div class="grow">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span class="name">X</span><span class="mono" style="font-size:13px;font-weight:800">31M</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="add">+ SET LIMIT</span><span style="display:flex;gap:8px;align-items:center"><span class="spark "><i style="height:20%"></i><i style="height:25%"></i><i style="height:30%"></i><i style="height:40%"></i><i style="height:35%"></i><i style="height:30%"></i><i style="height:31%"></i></span><span class="trend" style="color:var(--fg)">▲ 12%</span></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="clamp.js"></script><script src="icons.js"></script>
+</body></html>

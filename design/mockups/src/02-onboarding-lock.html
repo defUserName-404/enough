@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="clamp.css"></head>
+<body>
+<div class="status"></div>
+<div class="screen">
+  <div class="label" style="margin-top:12px">Setup · 02 / 02</div>
+  <h1 style="margin-top:14px">Lock it.</h1>
+  <p class="body" style="margin-top:14px">Once active, Enough can't be uninstalled. Loosening anything takes 24h. No override.</p>
+
+  <div style="margin-top:20px">
+    <div class="row">
+      <div class="check on">✓</div>
+      <div class="grow"><div class="name">Usage access</div><div class="label" style="margin-top:4px">granted</div></div>
+    </div>
+    <div class="row">
+      <div class="check on">✓</div>
+      <div class="grow"><div class="name">Autostart</div><div class="label" style="margin-top:4px">MIUI · enabled</div></div>
+    </div>
+    <div class="row">
+      <div class="check"></div>
+      <div class="grow"><div class="name">Battery: no restrictions</div><div class="label" style="margin-top:4px">MIUI · required</div></div>
+      <div class="btn sm">Open</div>
+    </div>
+  </div>
+
+  <div class="label" style="margin-top:22px">Run on your computer</div>
+  <div class="box" style="margin-top:8px;background:var(--fg);color:var(--bg);border-color:var(--fg)">
+    <div class="mono" style="font-size:12.5px;line-height:1.55;font-weight:500;">$ adb shell dpm set-device-owner<br>&nbsp;&nbsp;dev.clamp/.admin.ClampAdminReceiver</div>
+    <div style="display:flex;justify-content:flex-end;margin-top:10px">
+      <div class="mono" style="font-size:11px;font-weight:700;letter-spacing:1.8px;border:2px solid var(--bg);padding:6px 10px">COPY</div>
+    </div>
+  </div>
+  <div class="mono" style="margin-top:12px;font-size:11.5px;line-height:1.7;color:var(--dim)">
+    1 &nbsp;Remove all accounts (Mi + Google)<br>
+    2 &nbsp;USB debugging (Security settings) on<br>
+    3 &nbsp;Run command · re-add accounts
+  </div>
+
+  <div class="grow"></div>
+  <div class="btn ghost" style="justify-content:space-between;padding:0 18px">
+    <span>Waiting for activation</span><span class="cursor" style="background:var(--dim)"></span>
+  </div>
+</div>
+<script src="clamp.js"></script><script src="icons.js"></script>
+</body></html>
