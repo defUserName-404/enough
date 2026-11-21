@@ -9,7 +9,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 coroutines = "1.8.1"
 libadb = "3.1.1"
-bouncycastle = "1.81"
+bouncycastle = "1.87"
 conscrypt = "2.5.3"
 
 [libraries]
