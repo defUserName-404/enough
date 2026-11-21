@@ -51,7 +51,7 @@ class Notifier(private val ctx: Context, private val catalog: AppCatalog) : Noti
 
     fun ongoing(): Notification = NotificationCompat.Builder(ctx, CH_SERVICE)
         .setSmallIcon(R.drawable.ic_enough)
-        .setContentTitle("ENOUGH ACTIVE")
+        .setContentTitle("ACTIVE")
         .setOngoing(true)
         .setContentIntent(openApp())
         .build()
@@ -97,7 +97,7 @@ class Notifier(private val ctx: Context, private val catalog: AppCatalog) : Noti
     override fun configError() {
         val n = NotificationCompat.Builder(ctx, CH_ALERTS)
             .setSmallIcon(R.drawable.ic_enough)
-            .setContentTitle("ENOUGH CONFIG UNREADABLE")
+            .setContentTitle("CONFIG UNREADABLE")
             .setContentIntent(openApp())
             .build()
         post(ID_CONFIG, n)
@@ -106,7 +106,7 @@ class Notifier(private val ctx: Context, private val catalog: AppCatalog) : Noti
     fun released() {
         val n = NotificationCompat.Builder(ctx, CH_ALERTS)
             .setSmallIcon(R.drawable.ic_enough)
-            .setContentTitle("ENOUGH IS OFF · YOU CAN UNINSTALL IT NOW")
+            .setContentTitle("OFF · YOU CAN UNINSTALL NOW")
             .setContentText("Long-press the app icon, then Uninstall.")
             .setAutoCancel(true)
             .build()
@@ -116,7 +116,7 @@ class Notifier(private val ctx: Context, private val catalog: AppCatalog) : Noti
     override fun lostOwner() {
         val n = NotificationCompat.Builder(ctx, CH_ALERTS)
             .setSmallIcon(R.drawable.ic_enough)
-            .setContentTitle("ENOUGH LOST DEVICE OWNER · NOT ENFORCING")
+            .setContentTitle("LOST DEVICE OWNER · NOT ENFORCING")
             .setContentIntent(openApp())
             .build()
         post(ID_OWNER, n)
@@ -126,7 +126,7 @@ class Notifier(private val ctx: Context, private val catalog: AppCatalog) : Noti
         val awaiting = v.state is SetupState.AwaitingCode
         val b = NotificationCompat.Builder(ctx, CH_SETUP)
             .setSmallIcon(R.drawable.ic_enough)
-            .setContentTitle(if (awaiting) "ENTER THE PAIRING CODE" else "ENOUGH · SETUP")
+            .setContentTitle(if (awaiting) "ENTER THE PAIRING CODE" else "SETUP")
             .setContentText(v.log.lastOrNull() ?: "starting")
             .setOnlyAlertOnce(true)
             .setOngoing(!SetupMachine.terminal(v.state))

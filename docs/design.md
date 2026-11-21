@@ -88,7 +88,7 @@ Risk: some HyperOS builds have reportedly rejected `set-device-owner`. **Milesto
 - Motion: none, apart from a 1-frame invert on press.
 - **01 Apps:** title "What eats your time?", search bar, app rows (icon, name, checkbox, `– 20m +` stepper on checked rows), bottom *Next*.
 - **02 Lock:** title "Lock it.", a 4-item checklist (Usage access ✓, Autostart [MIUI], Battery [MIUI], Friend PIN optional), a monospace adb command card with a copy button, *Waiting for activation…* spinner.
-- **03 Home:** `ENOUGH` header with a gear icon (opens Settings: *UPDATE* and *UNINSTALL ENOUGH*), `USAGE →` link on the screen-time row, `LIMITS | PENDING · n` tabs. Variants: `03b` update banner, `03c`/`03d` pending tab (filled / empty), `07` Usage screen, `08` Settings. Rows: grayscale icon, `INSTAGRAM`, mono `12:40 / 20:00`, block bar. Blocked rows show red `LOCKED` and a red bar. The PENDING tab lists: `INSTAGRAM → 40:00 · 23:12:05` with `[CANCEL]`. A bottom `[ + ADD APP ]` button instead of a FAB.
+- **03 Home:** `ENOUGH` header with a gear icon (opens Settings: *UPDATE* and *UNINSTALL*), `USAGE →` link on the screen-time row, `LIMITS | PENDING · n` tabs. Variants: `03b` update banner, `03c`/`03d` pending tab (filled / empty), `07` Usage screen, `08` Settings. Rows: grayscale icon, `INSTAGRAM`, mono `12:40 / 20:00`, block bar. Blocked rows show red `LOCKED` and a red bar. The PENDING tab lists: `INSTAGRAM → 40:00 · 23:12:05` with `[CANCEL]`. A bottom `[ + ADD APP ]` button instead of a FAB.
 - **04 Edit sheet:** minute stepper, and a note: "Raising waits 24h. Lowering applies instantly."
 
 ### 4.8 Milestones
