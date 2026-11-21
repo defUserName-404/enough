@@ -4,20 +4,20 @@
 <div class="screen">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
     <h2 style="font-size:30px">Enough</h2>
-    <div class="mono" style="font-size:20px;letter-spacing:2px">▪▪</div>
+    <div class="iconbtn" data-ico="gear" style="background:var(--fg);color:var(--bg)"></div>
   </div>
-  <div class="label" style="margin-top:6px">Sat 21 Nov · active</div>
+  <div class="label" style="margin-top:6px;color:var(--fg)">Sat 21 Nov · active</div>
 
   <div style="margin-top:20px">
-    <div class="label">Screen time today</div>
-    <div class="mono" style="font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1;margin-top:6px">6H 12M</div>
+    <div class="label" style="color:var(--fg)">Screen time today</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+      <div class="mono" style="font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1">6H 12M</div>
+      <div class="link">Usage →</div>
+    </div>
     <div class="label" style="margin-top:8px;color:var(--fg)">Limited apps · 1H 06M</div>
   </div>
 
-  <div class="tabs2" style="display:flex;border:2px solid var(--fg);margin-top:18px">
-    <div style="flex:1;height:40px;display:grid;place-items:center;background:var(--fg);color:var(--bg);font:700 12px 'JetBrains Mono',monospace;letter-spacing:1.8px">LIMITS</div>
-    <div style="flex:1;height:40px;display:grid;place-items:center;font:700 12px 'JetBrains Mono',monospace;letter-spacing:1.8px">USAGE</div>
-  </div>
+  <div class="tabs" style="margin-top:18px"><div class="on">LIMITS</div><div>PENDING · 1</div></div>
 
   <div style="margin-top:6px">
     <div class="row">
@@ -30,7 +30,7 @@
     <div class="row">
       <div class="icon app locked" data-app="youtube"></div>
       <div class="grow">
-        <div style="display:flex;justify-content:space-between"><span class="name red">YouTube</span><span class="mono red" style="font-size:13px;font-weight:800;letter-spacing:1.5px">LOCKED</span></div>
+        <div style="display:flex;justify-content:space-between"><span class="name red">YouTube</span><span class="lk red" data-ico="lock" aria-label="Locked"></span></div>
         <div class="bar red" data-n="20"></div>
         <div class="label" style="margin-top:6px">30M / 30M · opens 00:00</div>
       </div>
@@ -42,15 +42,6 @@
         <div class="bar" data-n="7"></div>
       </div>
     </div>
-  </div>
-
-  <div class="box" style="margin-top:16px">
-    <div style="display:flex;justify-content:space-between"><span class="label" style="color:var(--fg)">Pending · 1</span><span class="label">waiting 24h</span></div>
-    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:10px">
-      <span class="name">Instagram</span><span class="mono" style="font-size:13px;font-weight:700">20M → 40M</span>
-    </div>
-    <div class="mono" style="font-size:30px;font-weight:800;letter-spacing:-1px;margin-top:8px">23H 12M LEFT</div>
-    <div class="btn sm" style="margin-top:12px">Cancel request</div>
   </div>
 
   <div class="grow"></div>

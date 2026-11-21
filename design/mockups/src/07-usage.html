@@ -21,16 +21,11 @@
 <body>
 <div class="status"></div>
 <div class="screen">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-    <h2 style="font-size:30px">Enough</h2>
-    <div class="mono" style="font-size:20px;letter-spacing:2px">▪▪</div>
+  <div style="display:flex;align-items:center;gap:14px;margin-top:10px">
+    <div class="iconbtn" data-ico="back"></div>
+    <h2 style="font-size:30px">Usage</h2>
   </div>
-  <div class="label" style="margin-top:6px">Sat 21 Nov · active</div>
-
-  <div style="display:flex;border:2px solid var(--fg);margin-top:18px">
-    <div style="flex:1;height:40px;display:grid;place-items:center;font:700 12px 'JetBrains Mono',monospace;letter-spacing:1.8px">LIMITS</div>
-    <div style="flex:1;height:40px;display:grid;place-items:center;background:var(--fg);color:var(--bg);font:700 12px 'JetBrains Mono',monospace;letter-spacing:1.8px">USAGE</div>
-  </div>
+  <div class="label" style="margin-top:6px;color:var(--fg)">Sat 21 Nov</div>
 
   <div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:18px">
     <span class="label">Last 7 days · avg 5H 40M</span>
@@ -56,7 +51,7 @@
       <div class="icon app locked" data-app="youtube"></div>
       <div class="grow">
         <div style="display:flex;justify-content:space-between;align-items:center"><span class="name red">YouTube</span><span class="mono red" style="font-size:13px;font-weight:800">4H 01M</span></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="lim red">LIMIT 10M · LOCKED</span><span style="display:flex;gap:8px;align-items:center"><span class="spark red"><i style="height:30%"></i><i style="height:55%"></i><i style="height:40%"></i><i style="height:70%"></i><i style="height:35%"></i><i style="height:90%"></i><i style="height:100%"></i></span><span class="trend" style="color:var(--red)">▲ 34%</span></span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="lim red"><span class="lk" data-ico="lock"></span>LIMIT 10M</span><span style="display:flex;gap:8px;align-items:center"><span class="spark red"><i style="height:30%"></i><i style="height:55%"></i><i style="height:40%"></i><i style="height:70%"></i><i style="height:35%"></i><i style="height:90%"></i><i style="height:100%"></i></span><span class="trend" style="color:var(--red)">▲ 34%</span></span></div>
       </div>
     </div>
     <div class="row">
