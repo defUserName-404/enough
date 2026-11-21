@@ -1,0 +1,64 @@
+name: Bug report
+description: Something in Enough is broken or behaves unexpectedly
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Security issue or limit bypass? **Don't file it here**, see [SECURITY.md](https://github.com/defUserName-404/enough/blob/main/SECURITY.md).
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. …
+        2. …
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Enough version
+      placeholder: e.g. 0.3.1 (Settings or release tag)
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: e.g. Xiaomi Redmi Note 12, HyperOS 1.0 / Android 14
+    validations:
+      required: true
+  - type: dropdown
+    id: provisioning
+    attributes:
+      label: How was Enough set up?
+      options:
+        - Device Owner via adb
+        - On-device provisioning
+        - Debug build from source
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      description: "`adb logcat` output or screenshots. Remove anything private."
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: I agree to follow the [Code of Conduct](https://github.com/defUserName-404/enough/blob/main/CODE_OF_CONDUCT.md)
+          required: true
