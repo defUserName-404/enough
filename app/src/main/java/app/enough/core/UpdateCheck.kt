@@ -25,10 +25,13 @@ data class Version(val major: Int, val minor: Int, val patch: Int) : Comparable<
 
 data class ReleaseInfo(val version: Version, val apkUrl: String, val sha256Url: String)
 
-/** Pure parsing for the GitHub "latest release" payload. No networking here. */
+/** Pure parsing for GitHub release discovery. No networking here. */
 object UpdateCheck {
     private val APK_NAME = Regex("""enough-\d+\.\d+\.\d+\.apk""")
     private val SHA256 = Regex("""\b[0-9a-fA-F]{64}\b""")
+    private val TAG_PATH = Regex("""/releases/tag/(v?\d+\.\d+\.\d+)\b""")
+
+    const val RELEASES_BASE = "https://github.com/defUserName-404/enough"
 
     /** Null when the release is a draft or prerelease, has no valid tag, or lacks the APK or its checksum. */
     fun parseLatest(json: String): ReleaseInfo? {
@@ -42,6 +45,18 @@ object UpdateCheck {
             ?.get("browser_download_url")?.jsonPrimitive?.content
         val apk = assets.mapNotNull { it["name"]?.jsonPrimitive?.content }.firstOrNull { APK_NAME.matches(it) } ?: return null
         return ReleaseInfo(version, url(apk) ?: return null, url("$apk.sha256") ?: return null)
+    }
+
+    /**
+     * From a `Location` (or full URL) like `.../releases/tag/v1.2.3`, build download URLs that match
+     * CI asset names (`enough-1.2.3.apk` + `.sha256`). Null if the path/tag is not a semver release.
+     */
+    fun parseLatestRedirect(location: String): ReleaseInfo? {
+        val tag = TAG_PATH.find(location.trim())?.groupValues?.get(1) ?: return null
+        val version = Version.parse(tag) ?: return null
+        val apk = "enough-$version.apk"
+        val base = "$RELEASES_BASE/releases/download/v$version"
+        return ReleaseInfo(version, "$base/$apk", "$base/$apk.sha256")
     }
 
     fun isNewer(current: String, latest: Version): Boolean {
