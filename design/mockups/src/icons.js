@@ -1,4 +1,4 @@
-// Stand-in launcher icons (grayscale, like Clamp renders real installed icons).
+// Stand-in launcher icons (grayscale, like Enough renders real installed icons).
 const ICONS = {
   instagram: `<rect width="48" height="48" rx="12" fill="#5a5a5a"/><rect x="11" y="11" width="26" height="26" rx="8" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="24" cy="24" r="6.2" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="31.6" cy="16.4" r="2" fill="#fff"/>`,
   youtube: `<rect width="48" height="48" rx="12" fill="#f2f2f2"/><rect x="8" y="13" width="32" height="22" rx="7" fill="#6e6e6e"/><path d="M21 19 L30 24 L21 29 Z" fill="#fff"/>`,

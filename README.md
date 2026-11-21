@@ -7,7 +7,7 @@ Pick the apps that eat your time and give each one a daily limit. When the limit
 - Android blocks the app itself ("Can't open this app"). There's no overlay, so nothing needs to be dismissed.
 - While Enough is active, it can't be uninstalled, force-stopped or cleared.
 - Usage tab: screen time per app, the last 7 days, and trends.
-- No internet, no accounts, no analytics. Everything stays on the phone.
+- No accounts, no analytics. Everything stays on the phone. The only network use is when you tap **UPDATE** in the app (see below).
 
 Requires **Android 11 or newer**.
 
@@ -16,7 +16,7 @@ Requires **Android 11 or newer**.
 1. Download the latest `enough-x.y.z.apk` from [Releases](../../releases).
 2. Open it and allow installing from your browser or file manager when asked.
 
-**Automatic updates:** install [Obtainium](https://github.com/ImranR98/Obtainium) and add this repository's URL. It notifies you of new releases and installs them. Updates keep your limits, because every release is signed with the same key:
+**Updating:** open Enough, tap **▪▪** (top right), then **CHECK FOR UPDATE**. If a newer release exists, tap **UPDATE TO x.y.z**. Enough downloads it from GitHub, checks the SHA-256, and installs it. It never checks in the background. Your limits are kept, because every release is signed with the same key:
 
 ```
 SHA-256 F6:DE:ED:A0:78:C4:08:EC:F6:A0:6E:B2:4F:FD:DB:F9:D6:ED:DD:9C:EC:B6:7A:98:02:56:DB:1F:41:36:2B:14
@@ -42,9 +42,9 @@ Android only lets an app become "device owner", which is what makes it impossibl
 
 ## Uninstall (no computer needed)
 
-1. Open Enough and tap **▪▪** (top right), then **RELEASE**.
+1. Open Enough and tap **▪▪** (top right), then **START UNINSTALL · 24H**.
 2. Wait 24 hours. You can cancel during that time.
-3. Enough unblocks everything and removes its own protection. Then uninstall it like any other app.
+3. Enough turns off all blocks and its own protection, and notifies you: "ENOUGH IS OFF · YOU CAN UNINSTALL IT NOW". Then long-press the app icon and uninstall it like any other app.
 
 If you are completely stuck, a factory reset from recovery always works. Enough deliberately doesn't block that.
 
@@ -54,7 +54,7 @@ If you are completely stuck, a factory reset from recovery always works. Enough 
 
 **Can I get around it?** Opening the app in a browser still works, so add your browser as a limited app too. Everything else (uninstalling, clearing data, changing the clock, safe mode, a second user) is blocked.
 
-**Is my data sent anywhere?** No. The only network access is to the phone itself (`127.0.0.1`), and only during the on-phone setup.
+**Is my data sent anywhere?** No. Your data never leaves the phone. Network access is limited to the phone itself (`127.0.0.1`, during on-phone setup) and to `api.github.com` plus GitHub's download servers when you tap **UPDATE**. A test fails the build if any other host appears in the code.
 
 ## Build from source
 
@@ -62,7 +62,7 @@ If you are completely stuck, a factory reset from recovery always works. Enough 
 ./gradlew testDebugUnitTest assembleDebug
 ```
 
-The debug build installs as `app.enough.debug` and is a "test only" app, so a developer can remove it with `adb shell dpm remove-active-admin app.enough.debug/dev.clamp.admin.ClampAdminReceiver`.
+The debug build installs as `app.enough.debug` and is a "test only" app (it can't self-update; install the release APK once instead), so a developer can remove it with `adb shell dpm remove-active-admin app.enough.debug/app.enough.admin.EnoughAdminReceiver`.
 
 Release builds are signed in GitHub Actions when a `vX.Y.Z` tag is pushed. Design notes are in [`docs/`](docs/).
 

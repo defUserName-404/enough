@@ -6,7 +6,7 @@ Status: Accepted (2026-11-21)
 Device Owner can only be granted by adb (`dpm set-device-owner`) or by QR/NFC provisioning, which needs a factory reset. Requiring a computer is a big setup hurdle. On Android 11+, *Wireless debugging* exposes adbd over TLS on the device itself, and an app can pair with it using the 6-digit pairing code, the same way LADB and Shizuku do.
 
 ## Decision
-Clamp embeds an adb client (`libadb-android`, Apache-2.0):
+Enough embeds an adb client (`libadb-android`, Apache-2.0):
 - It discovers the pairing and connect ports via mDNS.
 - It takes the pairing code through a notification RemoteInput, so the system pairing dialog stays open.
 - It connects to `127.0.0.1` and runs `dpm set-device-owner` on itself.
@@ -15,7 +15,7 @@ Clamp embeds an adb client (`libadb-android`, Apache-2.0):
 The computer adb path stays as a fallback tab.
 
 ## Consequences
-- Clamp now declares `INTERNET`, which amends NFR-4. All sockets are loopback-only through a single constant, guarded by a unit test, and there is no other networking.
+- Enough now declares `INTERNET`, which amends NFR-4. Setup sockets are loopback-only through a single constant. A second, user-triggered use was added later: the in-app updater (HTTPS to `api.github.com` only, FR-23). `LoopbackGuardTest` allows networking only in `Updater.kt` and fails on any other host.
 - New dependencies:
   - `com.github.MuntashirAkon:libadb-android:3.1.1` and `com.github.MuntashirAkon.spake2-java:spake2-android:2.2.1` (LGPL-3.0, native). Both come from **JitPack**, scoped to those two groups only.
   - `org.bouncycastle:bcprov-jdk15to18:1.81` (MIT), which also generates the self-signed cert, so the GPL-2.0 sun-security-android is avoided.

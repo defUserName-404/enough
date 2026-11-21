@@ -1,15 +1,15 @@
-# Clamp — Design
+# Enough — Design
 
 Mockups: ../design/mockups/*.png
 
 ## 4. Design doc
 
-### 4.1 Package layout (`app/src/main/java/dev/clamp/`)
+### 4.1 Package layout (`app/src/main/java/app/enough/`)
 ```
 core/      pure Kotlin: Config, PendingChange, ChangePolicy, Enforcer
 data/      ConfigStore (DataStore<Config>, JSON serializer)
 usage/     UsageReader (UsageStatsManager → Map<pkg, Duration>)
-admin/     ClampAdminReceiver (DeviceAdminReceiver), Policy (wraps DevicePolicyManager)
+admin/     EnoughAdminReceiver (DeviceAdminReceiver), Policy (wraps DevicePolicyManager)
 service/   EnforcementService (foreground), BootReceiver
 ui/        OnboardingAppsScreen, OnboardingLockScreen, HomeScreen, EditLimitSheet
 ```
@@ -50,8 +50,8 @@ Restart path: `BootReceiver` (`BOOT_COMPLETED`, `LOCKED_BOOT_COMPLETED`) starts 
 1. **Onboarding 1: "What eats your time?"** A searchable list of apps with checkboxes. Each checked app gets a minute stepper. Button: *Next*.
 2. **Onboarding 2: "Lock it."**
    - (a) A *Grant usage access* button opens `ACTION_USAGE_ACCESS_SETTINGS` and shows ✓ once granted.
-   - (b) *Activate*: shows the copyable `adb shell dpm set-device-owner dev.clamp/.admin.ClampAdminReceiver` plus 3 steps (remove accounts, enable USB debugging, run the command). It polls `isDeviceOwnerApp` every 2 s, and on success calls `activate()` and goes to Home.
-3. **Home.** One row per target: icon, name, `12 / 20 min` progress bar, and a 🔒 if blocked. A FAB adds an app. Tapping a row opens EditLimitSheet. A "Pending" section lists each pending change with a countdown, plus *Cancel* and. The overflow menu holds only *Release Clamp*.
+   - (b) *Activate*: shows the copyable `adb shell dpm set-device-owner app.enough/.admin.EnoughAdminReceiver` plus 3 steps (remove accounts, enable USB debugging, run the command). It polls `isDeviceOwnerApp` every 2 s, and on success calls `activate()` and goes to Home.
+3. **Home.** One row per target: icon, name, `12 / 20 min` progress bar, and a 🔒 if blocked. A FAB adds an app. Tapping a row opens EditLimitSheet. A "Pending" section lists each pending change with a countdown, plus *Cancel* and. The overflow menu holds only *Release Enough*.
 
 ### 4.7 Bypass matrix
 | Bypass | Mitigation |
@@ -73,8 +73,8 @@ Restart path: `BootReceiver` (`BOOT_COMPLETED`, `LOCKED_BOOT_COMPLETED`) starts 
 1. Settings → About phone → tap *OS version* 7× to enable developer options.
 2. Developer options: turn on **USB debugging**, **Install via USB** and **USB debugging (Security settings)**. These need a Mi account and a SIM once.
 3. Turn off Find device, then remove **all** accounts: Mi, Google and any others. `dpm` refuses if any account exists.
-4. `adb install clamp.apk`, then `adb shell dpm set-device-owner dev.clamp/.admin.ClampAdminReceiver`
-5. Re-add the accounts. Clamp detects Device Owner, then applies the restrictions, which disables developer options in release builds.
+4. `adb install enough.apk`, then `adb shell dpm set-device-owner app.enough/.admin.EnoughAdminReceiver`
+5. Re-add the accounts. Enough detects Device Owner, then applies the restrictions, which disables developer options in release builds.
 
 Risk: some HyperOS builds have reportedly rejected `set-device-owner`. **Milestone 0 is a feasibility spike on the real phone**: install a bare receiver, run `dpm`, and call `setPackagesSuspended` on one app. Stop and report if it fails.
 
@@ -89,7 +89,7 @@ Risk: some HyperOS builds have reportedly rejected `set-device-owner`. **Milesto
 - Motion: none, apart from a 1-frame invert on press.
 - **01 Apps:** title "What eats your time?", search bar, app rows (icon, name, checkbox, `– 20m +` stepper on checked rows), bottom *Next*.
 - **02 Lock:** title "Lock it.", a 4-item checklist (Usage access ✓, Autostart [MIUI], Battery [MIUI], Friend PIN optional), a monospace adb command card with a copy button, *Waiting for activation…* spinner.
-- **03 Home:** `CLAMP` header with `▪▪` overflow (only *RELEASE*). Rows: grayscale icon, `INSTAGRAM`, mono `12:40 / 20:00`, block bar. Blocked rows show red `LOCKED` and a red bar. A boxed `PENDING` section: `INSTAGRAM → 40:00 · 23:12:05` with `[CANCEL]`. A bottom `[ + ADD APP ]` button instead of a FAB.
+- **03 Home:** `ENOUGH` header with `▪▪` overflow (only *UPDATE* and *UNINSTALL ENOUGH*). Rows: grayscale icon, `INSTAGRAM`, mono `12:40 / 20:00`, block bar. Blocked rows show red `LOCKED` and a red bar. A boxed `PENDING` section: `INSTAGRAM → 40:00 · 23:12:05` with `[CANCEL]`. A bottom `[ + ADD APP ]` button instead of a FAB.
 - **04 Edit sheet:** minute stepper, and a note: "Raising waits 24h. Lowering applies instantly."
 
 ### 4.8 Milestones
@@ -101,8 +101,8 @@ Risk: some HyperOS builds have reportedly rejected `set-device-owner`. **Milesto
 5. Release flow + bypass checks on a real device
 
 ### 4.11 Computer-free setup (FR-20, ADR-0008)
-Mockups: `design/mockups/02b-onboarding-lock-phone.png`, `02c-pairing-notification.png`. Implementation plan: `.claude/plans/clamp-selfprovision.md`.
-- **Summary:** Clamp sets itself up as Device Owner using Android 11+ *Wireless debugging*. The user pairs with a pairing code and Clamp runs `dpm set-device-owner` on itself over localhost adb, the way LADB does. Cost: needs a localhost-only network permission (amends NFR-4) plus an embedded adb client. The computer adb path stays as the fallback.
+Mockups: `design/mockups/02b-onboarding-lock-phone.png`, `02c-pairing-notification.png`. Implementation plan: `.claude/plans/enough-selfprovision.md`.
+- **Summary:** Enough sets itself up as Device Owner using Android 11+ *Wireless debugging*. The user pairs with a pairing code and Enough runs `dpm set-device-owner` on itself over localhost adb, the way LADB does. Cost: needs a localhost-only network permission (amends NFR-4) plus an embedded adb client. The computer adb path stays as the fallback.
 
 ### 4.12 Usage insight & naming (FR-21, FR-22)
 Mockups: `design/mockups/03-home.png` (LIMITS tab) and `07-usage.png` (USAGE tab).
