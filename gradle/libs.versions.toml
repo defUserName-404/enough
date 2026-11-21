@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.1"
+agp = "9.5.2"
 kotlin = "2.4.21"
 composeBom = "2024.12.01"
 activityCompose = "1.9.0"
@@ -32,6 +32,5 @@ conscrypt-android = { group = "org.conscrypt", name = "conscrypt-android", versi
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
