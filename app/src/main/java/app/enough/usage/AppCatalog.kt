@@ -9,6 +9,29 @@ import app.enough.core.AppInfo
 import app.enough.core.Config
 
 class AppCatalog(private val ctx: Context) {
+    companion object {
+        /**
+         * Launchers, security/battery managers and dialers per OEM. Suspending one of these can lock the
+         * owner out of the home screen, settings or calls, so they are never offered. Names that are not
+         * installed are harmless. Package names are not yet checked on real hardware (release-smoke-test.md F9).
+         */
+        val OEM_CRITICAL: Set<String> = setOf(
+            // Xiaomi / Redmi / POCO
+            "com.miui.securitycenter", "com.miui.home", "com.mi.android.globallauncher", "com.miui.powerkeeper",
+            // Samsung
+            "com.sec.android.app.launcher", "com.samsung.android.dialer", "com.samsung.android.incallui", "com.samsung.android.lool",
+            // Oppo / Realme / OnePlus
+            "com.android.launcher", "net.oneplus.launcher", "com.coloros.safecenter", "com.oppo.safe",
+            "com.oplus.battery", "com.coloros.phonemanager", "com.oneplus.security",
+            // Vivo / iQOO
+            "com.bbk.launcher2", "com.iqoo.secure", "com.vivo.permissionmanager",
+            // Huawei / Honor
+            "com.huawei.android.launcher", "com.huawei.systemmanager", "com.hihonor.android.launcher", "com.hihonor.systemmanager",
+            // Pixel
+            "com.google.android.apps.nexuslauncher",
+        )
+    }
+
     private val pm = ctx.packageManager
 
     @Suppress("DEPRECATION")
@@ -22,15 +45,14 @@ class AppCatalog(private val ctx: Context) {
     /**
      * Packages that must not be picked. No public API probes suspendability, so [Config.unsuspendable]
      * (packages DPM refused at runtime) is the only dynamic signal.
-     * Unverified: other OEM launchers / system UIs beyond the MIUI ones below (release-smoke-test.md section F).
+     * [OEM_CRITICAL] covers the known OEM launchers and system managers; the rest is resolved at runtime.
      */
     @Suppress("DEPRECATION")
     fun unpickable(config: Config): Set<String> {
         val out = HashSet<String>()
         out += ctx.packageName
         out += "com.android.settings"
-        out += "com.miui.securitycenter"
-        out += "com.miui.home"
+        out += OEM_CRITICAL
         pm.resolveActivity(Intent(Settings.ACTION_SETTINGS), PackageManager.MATCH_DEFAULT_ONLY)
             ?.activityInfo?.packageName?.let { out += it }
         pm.resolveActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME), PackageManager.MATCH_DEFAULT_ONLY)

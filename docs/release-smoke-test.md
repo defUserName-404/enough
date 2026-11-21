@@ -84,7 +84,7 @@ then delete the "Unverified" comment there.
 | F6 | Type the pairing code in the shade notification | Inline reply works; otherwise use split screen | `setup/PairCodeReceiver.kt` |
 | F7 | After setup, post any Enough notification | Shows without a permission prompt (POST_NOTIFICATIONS auto-granted) | `service/Notifier.kt`, `admin/Policy.kt` |
 | F8 | After setup: `adb logcat -d` and search for "protection missing" | No match on HyperOS | `admin/Policy.kt` (`applyProtection`) |
-| F9 | Limit apps incl. Security and Settings; run a limit out | Refused packages land in the unsuspendable list; "App paused" dialog shows for the rest | `admin/Policy.kt` (`setSuspended`), `usage/AppCatalog.kt` |
+| F9 | Limit apps incl. Security and Settings; run a limit out | Refused packages land in the unsuspendable list; "App paused" dialog shows for the rest; on any OEM phone, its launcher and security app are absent from the picker (`AppCatalog.OEM_CRITICAL` names are unverified) | `admin/Policy.kt` (`setSuspended`), `usage/AppCatalog.kt` |
 | F10 | Reboot, wait 2 min, open nothing | Enforcement notification is back and apps still block (LOCKED_BOOT_COMPLETED arrives) | `service/EnforcementService.kt`, `service/BootReceiver.kt` |
 | F11 | Use a limited app 10 min incl. floating window and split screen | Count is within ~1 min of reality; Dual apps (user 999) are not counted | `usage/UsageReader.kt` |
 
