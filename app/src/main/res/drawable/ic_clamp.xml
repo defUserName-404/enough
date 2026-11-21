@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon: [ ▬ ] — a bar of time squeezed by brackets. Single colour; the system tints it. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M3,4.5h6.5v2.75h-3.5v9.5h3.5v2.75h-6.5z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M21,4.5h-6.5v2.75h3.5v9.5h-3.5v2.75h6.5z" />
+    <path android:fillColor="#FFFFFFFF" android:pathData="M8,10.25h8v3.5h-8z" />
+</vector>
