@@ -61,7 +61,6 @@ Restart path: `BootReceiver` (`BOOT_COMPLETED`, `LOCKED_BOOT_COMPLETED`) starts 
 | Revoke usage access | Fail closed: block all targets |
 | Change the clock | `DISALLOW_CONFIG_DATE_TIME` |
 | Safe mode | `DISALLOW_SAFE_BOOT` |
-| adb tricks | `DISALLOW_DEBUGGING_FEATURES` (release) |
 | Raise limit / remove app | 24h wait, no override |
 | Web version, or a duplicate/alt client | **Known limitation.** Mitigation: add the browser as a target. |
 | Factory reset from recovery | **Accepted.** It's the deliberate last resort. |
@@ -74,7 +73,7 @@ Restart path: `BootReceiver` (`BOOT_COMPLETED`, `LOCKED_BOOT_COMPLETED`) starts 
 2. Developer options: turn on **USB debugging**, **Install via USB** and **USB debugging (Security settings)**. These need a Mi account and a SIM once.
 3. Turn off Find device, then remove **all** accounts: Mi, Google and any others. `dpm` refuses if any account exists.
 4. `adb install enough.apk`, then `adb shell dpm set-device-owner app.enough/.admin.EnoughAdminReceiver`
-5. Re-add the accounts. Enough detects Device Owner, then applies the restrictions, which disables developer options in release builds.
+5. Re-add the accounts. Enough detects Device Owner, then applies the restrictions (date/time, safe boot, users/profiles). Developer options stay available.
 
 Risk: some HyperOS builds have reportedly rejected `set-device-owner`. **Milestone 0 is a feasibility spike on the real phone**: install a bare receiver, run `dpm`, and call `setPackagesSuspended` on one app. Stop and report if it fails.
 

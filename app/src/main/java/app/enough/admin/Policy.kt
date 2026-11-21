@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.UserManager
 import android.util.Log
-import app.enough.BuildConfig
 import app.enough.core.DevicePort
 import app.enough.core.SuspendResult
 
@@ -29,11 +28,8 @@ class Policy(private val ctx: Context) : DevicePort {
     private fun check(name: String, block: () -> Boolean): String? =
         if (runCatching(block).getOrDefault(false)) null else name
 
-    private fun restrictions(): List<Pair<String, String>> {
-        val l = RESTRICTIONS.map { it to LABELS.getValue(it) }.toMutableList()
-        if (!BuildConfig.DEBUG) l += UserManager.DISALLOW_DEBUGGING_FEATURES to "DEBUGGING"
-        return l
-    }
+    private fun restrictions(): List<Pair<String, String>> =
+        RESTRICTIONS.map { it to LABELS.getValue(it) }
 
     /** Applies everything, then verifies. Returns labels of what is missing. Idempotent. */
     // TODO(device): verify each step on HyperOS
@@ -41,6 +37,8 @@ class Policy(private val ctx: Context) : DevicePort {
         step("uninstallBlocked") { dpm.setUninstallBlocked(admin, self, true) }
         step("userControlDisabled") { dpm.setUserControlDisabledPackages(admin, listOf(self)) }
         restrictions().forEach { (r, _) -> step("restriction $r") { dpm.addUserRestriction(admin, r) } }
+        // Drop any leftover block from older releases that applied DISALLOW_DEBUGGING_FEATURES.
+        step("clear debugging") { dpm.clearUserRestriction(admin, UserManager.DISALLOW_DEBUGGING_FEATURES) }
         step("autoTime") { dpm.setAutoTimeEnabled(admin, true) }
         step("autoTimeZone") { dpm.setAutoTimeZoneEnabled(admin, true) }
         // Shown by the system "Can't open this app" dialog (Learn more) and "managed by" labels instead of "your IT admin".
@@ -71,10 +69,12 @@ class Policy(private val ctx: Context) : DevicePort {
 
     // TODO(device): which packages MIUI refuses (securitycenter, miui.home?); "App paused" dialog behaviour.
     override fun setSuspended(pkgs: Collection<String>, suspended: Boolean): SuspendResult {
-        if (pkgs.isEmpty()) return SuspendResult()
+        // Never suspend Enough itself — picker excludes it, this is the hard safety net.
+        val filtered = pkgs.filter { it != self }
+        if (filtered.isEmpty()) return SuspendResult()
         return try {
-            val refused = dpm.setPackagesSuspended(admin, pkgs.toTypedArray(), suspended).toList()
-            Log.i("Enough", "setPackagesSuspended($suspended) $pkgs refused=$refused now=${pkgs.map { "$it:" + runCatching { pm.isPackageSuspended(it) }.getOrNull() }}")
+            val refused = dpm.setPackagesSuspended(admin, filtered.toTypedArray(), suspended).toList()
+            Log.i("Enough", "setPackagesSuspended($suspended) $filtered refused=$refused now=${filtered.map { "$it:" + runCatching { pm.isPackageSuspended(it) }.getOrNull() }}")
             if (refused.isNotEmpty()) Log.w("Enough", "setPackagesSuspended($suspended) refused: $refused")
             SuspendResult(refused)
         } catch (e: Exception) {

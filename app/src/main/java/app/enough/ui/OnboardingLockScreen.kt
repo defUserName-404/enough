@@ -74,7 +74,7 @@ fun OnboardingLockScreen(
     var tab by rememberSaveable { mutableIntStateOf(0) } // 0 = phone (default), 1 = computer
 
     // Usage access is required first, otherwise activation would instantly fail closed.
-    // The setup gate guarantees adb wifi goes off before DISALLOW_DEBUGGING_FEATURES is applied.
+    // The setup gate guarantees adb wifi goes off before activation applies the other restrictions.
     LaunchedEffect(usageGranted) {
         if (!usageGranted) return@LaunchedEffect
         while (true) {
