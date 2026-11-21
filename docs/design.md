@@ -51,7 +51,7 @@ Restart path: `BootReceiver` (`BOOT_COMPLETED`, `LOCKED_BOOT_COMPLETED`) starts 
 2. **Onboarding 2: "Lock it."**
    - (a) A *Grant usage access* button opens `ACTION_USAGE_ACCESS_SETTINGS` and shows ✓ once granted.
    - (b) *Activate*: shows the copyable `adb shell dpm set-device-owner app.enough/.admin.EnoughAdminReceiver` plus 3 steps (remove accounts, enable USB debugging, run the command). It polls `isDeviceOwnerApp` every 2 s, and on success calls `activate()` and goes to Home.
-3. **Home.** One row per target: icon, name, `12 / 20 min` progress bar, and a 🔒 if blocked. A FAB adds an app. Tapping a row opens EditLimitSheet. A "Pending" section lists each pending change with a countdown, plus *Cancel* and. The overflow menu holds only *Release Enough*.
+3. **Home.** One row per target: icon, name, `12 / 20 min` progress bar, and a 🔒 if blocked. A FAB adds an app. Tapping a row opens EditLimitSheet. Two tabs: *LIMITS* (the rows) and *PENDING · n* (each pending change with a countdown and *Cancel request*). A `USAGE →` link beside "Screen time today" opens the Usage screen. A gear icon opens Settings (*Update*, *Uninstall Enough*). An update banner shows on Home only when a newer release exists; Enough checks once per launch.
 
 ### 4.7 Bypass matrix
 | Bypass | Mitigation |
@@ -88,7 +88,7 @@ Risk: some HyperOS builds have reportedly rejected `set-device-owner`. **Milesto
 - Motion: none, apart from a 1-frame invert on press.
 - **01 Apps:** title "What eats your time?", search bar, app rows (icon, name, checkbox, `– 20m +` stepper on checked rows), bottom *Next*.
 - **02 Lock:** title "Lock it.", a 4-item checklist (Usage access ✓, Autostart [MIUI], Battery [MIUI], Friend PIN optional), a monospace adb command card with a copy button, *Waiting for activation…* spinner.
-- **03 Home:** `ENOUGH` header with `▪▪` overflow (only *UPDATE* and *UNINSTALL ENOUGH*). Rows: grayscale icon, `INSTAGRAM`, mono `12:40 / 20:00`, block bar. Blocked rows show red `LOCKED` and a red bar. A boxed `PENDING` section: `INSTAGRAM → 40:00 · 23:12:05` with `[CANCEL]`. A bottom `[ + ADD APP ]` button instead of a FAB.
+- **03 Home:** `ENOUGH` header with a gear icon (opens Settings: *UPDATE* and *UNINSTALL ENOUGH*), `USAGE →` link on the screen-time row, `LIMITS | PENDING · n` tabs. Variants: `03b` update banner, `03c`/`03d` pending tab (filled / empty), `07` Usage screen, `08` Settings. Rows: grayscale icon, `INSTAGRAM`, mono `12:40 / 20:00`, block bar. Blocked rows show red `LOCKED` and a red bar. The PENDING tab lists: `INSTAGRAM → 40:00 · 23:12:05` with `[CANCEL]`. A bottom `[ + ADD APP ]` button instead of a FAB.
 - **04 Edit sheet:** minute stepper, and a note: "Raising waits 24h. Lowering applies instantly."
 
 ### 4.8 Milestones
