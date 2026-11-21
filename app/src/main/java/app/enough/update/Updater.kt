@@ -31,6 +31,9 @@ sealed interface UpdateState {
  * The only networking in the app besides the loopback adb client. Runs only when the user taps
  * CHECK or UPDATE, and only talks to GitHub over HTTPS. Android itself refuses an update that is
  * not signed with the same key as the installed app.
+ *
+ * Uses public github.com release URLs (not the rate-limited REST API). Downloads follow redirects
+ * to GitHub's CDN.
  */
 class Updater(private val ctx: Context) {
     private val _state = MutableStateFlow<UpdateState>(UpdateState.Idle)
@@ -43,7 +46,7 @@ class Updater(private val ctx: Context) {
         _state.value = UpdateState.Checking
         _state.value = withContext(Dispatchers.IO) {
             try {
-                val info = UpdateCheck.parseLatest(getText(LATEST))
+                val info = UpdateCheck.parseLatestRedirect(latestLocation())
                 when {
                     info == null -> UpdateState.Failed("No release found.")
                     UpdateCheck.isNewer(BuildConfig.VERSION_NAME, info.version) -> UpdateState.Available(info)
@@ -98,7 +101,7 @@ class Updater(private val ctx: Context) {
     private fun download(url: String, expectedSha256: String): File {
         val dir = File(ctx.cacheDir, "updates").apply { deleteRecursively(); mkdirs() }
         val out = File(dir, "enough.apk")
-        val c = open(url)
+        val c = open(url, followRedirects = true)
         val total = c.contentLengthLong
         val md = MessageDigest.getInstance("SHA-256")
         c.inputStream.use { input ->
@@ -123,17 +126,43 @@ class Updater(private val ctx: Context) {
         return out
     }
 
-    private fun getText(url: String): String = open(url).inputStream.use { it.readBytes().toString(Charsets.UTF_8) }
+    private fun latestLocation(): String {
+        val c = open(LATEST, followRedirects = false)
+        val code = c.responseCode
+        val loc = c.getHeaderField("Location")
+        c.disconnect()
+        if (code !in 300..399 || loc.isNullOrBlank()) {
+            throw IllegalStateException(httpError(code, null))
+        }
+        return loc
+    }
 
-    private fun open(url: String): HttpURLConnection {
+    private fun getText(url: String): String = open(url, followRedirects = true).inputStream.use { it.readBytes().toString(Charsets.UTF_8) }
+
+    private fun open(url: String, followRedirects: Boolean): HttpURLConnection {
         require(url.startsWith("https://")) { "https only" }
         val c = URL(url).openConnection() as HttpURLConnection
+        c.instanceFollowRedirects = followRedirects
         c.connectTimeout = 15_000
-        c.readTimeout = 30_000
+        c.readTimeout = 60_000
         c.setRequestProperty("User-Agent", "Enough-Updater")
-        c.setRequestProperty("Accept", "application/vnd.github+json, application/octet-stream")
-        if (c.responseCode !in 200..299) throw IllegalStateException("GitHub answered ${c.responseCode}.")
+        c.setRequestProperty("Accept", "*/*")
+        if (followRedirects) {
+            val code = c.responseCode
+            if (code !in 200..299) {
+                val body = runCatching { c.errorStream?.readBytes()?.toString(Charsets.UTF_8) }.getOrNull()
+                c.disconnect()
+                throw IllegalStateException(httpError(code, body))
+            }
+        }
         return c
+    }
+
+    private fun httpError(code: Int, body: String?): String {
+        if (code == 403 && body?.contains("rate limit", ignoreCase = true) == true) {
+            return "GitHub rate limit. Try again later."
+        }
+        return "GitHub answered $code."
     }
 
     private fun netMessage(e: Exception): String = when (e) {
@@ -142,6 +171,6 @@ class Updater(private val ctx: Context) {
     }
 
     companion object {
-        private const val LATEST = "https://api.github.com/repos/defUserName-404/enough/releases/latest"
+        private const val LATEST = "https://github.com/defUserName-404/enough/releases/latest"
     }
 }

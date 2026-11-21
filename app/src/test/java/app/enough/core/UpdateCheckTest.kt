@@ -46,6 +46,19 @@ class UpdateCheckTest {
         assertNull(UpdateCheck.parseSha256("oops"))
     }
 
+    @Test fun parses_latest_redirect_location() {
+        val r = UpdateCheck.parseLatestRedirect(
+            "https://github.com/defUserName-404/enough/releases/tag/v1.2.3",
+        )!!
+        assertEquals(Version(1, 2, 3), r.version)
+        assertEquals("${UpdateCheck.RELEASES_BASE}/releases/download/v1.2.3/enough-1.2.3.apk", r.apkUrl)
+        assertEquals("${UpdateCheck.RELEASES_BASE}/releases/download/v1.2.3/enough-1.2.3.apk.sha256", r.sha256Url)
+        assertEquals(Version(1, 0, 0), UpdateCheck.parseLatestRedirect("/releases/tag/1.0.0")!!.version)
+        assertNull(UpdateCheck.parseLatestRedirect("https://github.com/x/y/releases/latest"))
+        assertNull(UpdateCheck.parseLatestRedirect("https://github.com/x/y/releases/tag/nightly"))
+        assertNull(UpdateCheck.parseLatestRedirect(""))
+    }
+
     private companion object {
         const val ASSETS = """{"name":"enough-1.2.3.apk","browser_download_url":"https://x/enough-1.2.3.apk"},""" +
             """{"name":"enough-1.2.3.apk.sha256","browser_download_url":"https://x/enough-1.2.3.apk.sha256"}"""

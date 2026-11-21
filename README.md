@@ -54,7 +54,7 @@ If you are completely stuck, a factory reset from recovery always works. Enough 
 
 **Can I get around it?** Opening the app in a browser still works, so add your browser as a limited app too. Everything else (uninstalling, clearing data, changing the clock, safe mode, a second user) is blocked.
 
-**Is my data sent anywhere?** No. Your data never leaves the phone. Network access is limited to the phone itself (`127.0.0.1`, during on-phone setup) and to `api.github.com` plus GitHub's download servers when you tap **UPDATE**. A test fails the build if any other host appears in the code.
+**Is my data sent anywhere?** No. Your data never leaves the phone. Network access is limited to the phone itself (`127.0.0.1`, during on-phone setup) and to `github.com` release pages/downloads (and GitHub's CDN via redirect) when you tap **UPDATE**. A test fails the build if any other host appears in the code.
 
 ## Build from source
 

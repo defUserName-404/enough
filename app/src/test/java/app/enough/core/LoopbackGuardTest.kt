@@ -31,7 +31,7 @@ class LoopbackGuardTest {
             bannedHere.forEach { if (it in text) bad += "${f.name}: $it" }
             if (isUpdater) {
                 Regex("""https?://[^/"\s]+""").findAll(text).forEach {
-                    if (it.value != "https://api.github.com") bad += "${f.name}: ${it.value}"
+                    if (it.value != "https://github.com") bad += "${f.name}: ${it.value}"
                 }
                 if ("http://" in text) bad += "${f.name}: plain http"
             }
