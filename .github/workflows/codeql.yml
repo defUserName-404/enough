@@ -19,10 +19,16 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
       - uses: github/codeql-action/init@v3
         with:
           languages: java-kotlin
-          build-mode: none
+          build-mode: manual
+      - name: Build
+        run: ./gradlew assembleDebug --console=plain --no-daemon
       - uses: github/codeql-action/analyze@v3
         with:
           category: "/language:java-kotlin"
