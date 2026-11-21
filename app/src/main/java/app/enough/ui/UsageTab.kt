@@ -7,7 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import app.enough.ui.theme.Dims
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -44,6 +49,7 @@ import app.enough.core.axisLabel
 import app.enough.core.dur
 import app.enough.core.durMin
 import app.enough.ui.components.AppIcon
+import app.enough.ui.components.LockIcon
 import app.enough.ui.components.EnoughRow
 import app.enough.ui.components.Hairline
 import app.enough.ui.components.Txt
@@ -199,11 +205,12 @@ private fun AppUsageRow(
             Row(Modifier.fillMaxWidth().padding(top = 6.dp), verticalAlignment = Alignment.Bottom) {
                 Box(Modifier.weight(1f)) {
                     if (limitMin != null) {
-                        Box(Modifier.border(2.dp, accent).padding(horizontal = 8.dp, vertical = 3.dp)) {
-                            Txt(
-                                "LIMIT ${durMin(limitMin)}" + if (locked) " · LOCKED" else "",
-                                EnoughType.label.copy(fontSize = 11.sp), accent,
-                            )
+                        Row(Modifier.border(2.dp, accent).padding(horizontal = 8.dp, vertical = 3.dp), verticalAlignment = Alignment.CenterVertically) {
+                            if (locked) {
+                                LockIcon(accent, 12.dp)
+                                Spacer(Modifier.width(6.dp))
+                            }
+                            Txt("LIMIT ${durMin(limitMin)}", EnoughType.label.copy(fontSize = 11.sp), accent)
                         }
                     } else if (canSetLimit) {
                         Box(
@@ -236,6 +243,32 @@ private fun Sparkline(values: List<Duration>, color: Color, height: Dp = 26.dp) 
         values.forEach { v ->
             val h = maxOf(2f, height.value * (v.toMillis().toFloat() / max.toMillis())).dp
             Box(Modifier.width(7.dp).height(h).background(color))
+        }
+    }
+}
+
+/** Standalone Usage screen, opened from the Home "USAGE →" link. */
+@Composable
+fun UsageScreen(
+    history: History?,
+    noAccess: Boolean,
+    labels: Map<String, String>,
+    config: Config,
+    used: Map<String, Duration>?,
+    now: Instant,
+    unpickable: Set<String>,
+    onSetLimit: (String) -> Unit,
+    onBack: () -> Unit,
+) {
+    val c = LocalEnoughColors.current
+    Column(Modifier.fillMaxSize().padding(horizontal = Dims.Pad)) {
+        BackHeader(S.USAGE_TITLE, onBack)
+        Txt(
+            DESC_FMT.format(now.atZone(ZoneId.systemDefault())).uppercase(),
+            EnoughType.label, c.fg, Modifier.padding(top = 6.dp),
+        )
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+            UsageTab(history, noAccess, labels, config, used, now, unpickable, onSetLimit)
         }
     }
 }
