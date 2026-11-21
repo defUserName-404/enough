@@ -23,4 +23,4 @@ The computer adb path stays as a fallback tab.
 - ABIs are limited to arm64-v8a and armeabi-v7a. The APK grows by several MB. R8 shrinking for release is a separate task.
 - Accounts still have to be removed before setup, because Android enforces that for every adb path.
 - MIUI/HyperOS behavior is unverified: mDNS, RemoteInput, and whether "USB debugging (Security settings)" is needed. These are marked `TODO(device)`, with a fallback to the computer tab.
-- Release builds still apply `DISALLOW_DEBUGGING_FEATURES` after activation, so the adb surface closes again.
+- After activation, Enough turns Wireless debugging off itself; it does not re-apply `DISALLOW_DEBUGGING_FEATURES`, so developer options stay available.

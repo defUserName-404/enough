@@ -74,7 +74,7 @@ android {
 
     buildFeatures {
         compose = true
-        buildConfig = true // BuildConfig.DEBUG gates DISALLOW_DEBUGGING_FEATURES
+        buildConfig = true // BuildConfig.APPLICATION_ID / DEBUG used by setup and UI
     }
 
     lint {

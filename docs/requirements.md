@@ -17,7 +17,7 @@
 | FR-13 | **Uninstall** (internally `Change.Release`; a loosening change): unblock everything, lift all restrictions, drop Device Owner. After that the app uninstalls normally. |
 | FR-14 | Enforcement survives reboots. |
 | FR-15 | **Fail closed**: if usage access is revoked or usage can't be read, block all targets and send a notification asking to re-grant. |
-| FR-16 | Block the known bypasses: changing date/time, safe mode boot, and developer options (release builds only). |
+| FR-16 | Block the known bypasses: changing date/time and safe mode boot. Developer options stay available. |
 | FR-17 | UI: exactly **2 onboarding screens** and **1 home screen** (plus an edit sheet). |
 | FR-18 | **OEM helper checklist (works on any Android 11+ phone).** All core APIs are AOSP. Onboarding screen 2 adds extra items only when the manufacturer needs them, using an `OemHelper` with a table of intents:<br>• **Xiaomi/Redmi/POCO:** Autostart, via `com.miui.securitycenter/com.miui.permcenter.autostart.AutoStartManagementActivity`, plus Battery: no restrictions.<br>• **Oppo/Realme/OnePlus (ColorOS):** startup manager.<br>• **Vivo:** background power.<br>• **Huawei/Honor:** app launch.<br>• **Samsung:** "Never sleeping apps".<br>• **Pixel/AOSP/other:** no extra items.<br>Each intent falls back to `ACTION_APPLICATION_DETAILS_SETTINGS` if it fails to resolve. |
 | FR-19 | Block extra users and profiles: `DISALLOW_ADD_USER`, `DISALLOW_USER_SWITCH` and `DISALLOW_ADD_MANAGED_PROFILE`. These cover MIUI **Second space**, guest mode and Dual apps. |
