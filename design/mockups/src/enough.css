@@ -71,3 +71,14 @@ body.light .scrim { background:rgba(255,255,255,.82); }
 .icon.app svg { display:block; }
 .icon.app.locked { filter:none; outline:2px solid var(--red); outline-offset:3px; }
 .icon.app.locked svg { opacity:.35; filter:grayscale(1); }
+
+/* home chrome: header icon button, tabs, text link */
+.iconbtn { width:44px; height:44px; flex:none; border:2px solid var(--fg); display:grid; place-items:center; }
+.iconbtn svg { display:block; }
+.tabs { display:flex; border:2px solid var(--fg); }
+.tabs > div { flex:1; height:40px; display:grid; place-items:center; font:700 12px 'JetBrains Mono',monospace; letter-spacing:1.8px; }
+.tabs > div.on { background:var(--fg); color:var(--bg); }
+.link { font:700 12px 'JetBrains Mono',monospace; letter-spacing:1.6px; text-transform:uppercase; border-bottom:2px solid var(--fg); padding-bottom:1px; }
+.lk { display:inline-flex; align-items:center; }
+.lk svg { width:16px; height:16px; }
+.lim .lk { margin-right:6px; vertical-align:-2px; } .lim .lk svg { width:12px; height:12px; }

@@ -289,3 +289,20 @@ fun EnoughTabs(labels: List<String>, selected: Int, onSelect: (Int) -> Unit, mod
         }
     }
 }
+
+/** Padlock glyph (filled body + shackle), drawn so it matches the hard-edged style. Announces "Locked". */
+@Composable
+fun LockIcon(tint: Color, size: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
+    androidx.compose.foundation.Canvas(modifier.size(size).semantics { contentDescription = "Locked" }) {
+        val u = this.size.minDimension / 24f
+        val sw = 2.6f * u
+        drawRect(tint, topLeft = androidx.compose.ui.geometry.Offset(4f * u, 11f * u), size = androidx.compose.ui.geometry.Size(16f * u, 11f * u))
+        val shackle = androidx.compose.ui.graphics.Path().apply {
+            moveTo(7.5f * u, 11f * u)
+            lineTo(7.5f * u, 8f * u)
+            arcTo(androidx.compose.ui.geometry.Rect(7.5f * u, 3.5f * u, 16.5f * u, 12.5f * u), 180f, 180f, false)
+            lineTo(16.5f * u, 11f * u)
+        }
+        drawPath(shackle, tint, style = androidx.compose.ui.graphics.drawscope.Stroke(sw))
+    }
+}

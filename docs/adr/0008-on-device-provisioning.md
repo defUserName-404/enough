@@ -15,7 +15,7 @@ Enough embeds an adb client (`libadb-android`, Apache-2.0):
 The computer adb path stays as a fallback tab.
 
 ## Consequences
-- Enough now declares `INTERNET`, which amends NFR-4. Setup sockets are loopback-only through a single constant. A second, user-triggered use was added later: the in-app updater (HTTPS to `github.com` release URLs, FR-23; avoids the unauthenticated REST API rate limit). `LoopbackGuardTest` allows networking only in `Updater.kt` and fails on any other hardcoded host.
+- Enough now declares `INTERNET`, which amends NFR-4. Setup sockets are loopback-only through a single constant. A second use was added later: the in-app updater (checks once per app launch, plus on demand; HTTPS to `github.com` release URLs, FR-23). `LoopbackGuardTest` allows networking only in `Updater.kt` and fails on any other hardcoded host.
 - New dependencies:
   - `com.github.MuntashirAkon:libadb-android:3.1.1` and `com.github.MuntashirAkon.spake2-java:spake2-android:2.2.1` (LGPL-3.0, native). Both come from **JitPack**, scoped to those two groups only.
   - `org.bouncycastle:bcprov-jdk15to18:1.81` (MIT), which also generates the self-signed cert, so the GPL-2.0 sun-security-android is avoided.

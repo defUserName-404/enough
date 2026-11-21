@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="enough.css"></head>
+<body>
+<div class="status"></div>
+<div class="screen">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+    <h2 style="font-size:30px">Enough</h2>
+    <div class="iconbtn" data-ico="gear" style="background:var(--fg);color:var(--bg)"></div>
+  </div>
+  <div class="label" style="margin-top:6px;color:var(--fg)">Sat 21 Nov · active</div>
+
+  <!-- update banner: shown only when a newer release exists -->
+  <div class="box" style="margin-top:14px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+    <div class="grow">
+      <div class="label" style="color:var(--fg)">Update available</div>
+      <div class="mono" style="font-size:13px;font-weight:700;margin-top:4px">1.1.2 → 1.1.3</div>
+    </div>
+    <div class="btn sm primary">Update</div>
+  </div>
+
+  <div style="margin-top:20px">
+    <div class="label" style="color:var(--fg)">Screen time today</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+      <div class="mono" style="font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1">6H 12M</div>
+      <div class="link">Usage →</div>
+    </div>
+    <div class="label" style="margin-top:8px;color:var(--fg)">Limited apps · 1H 06M</div>
+  </div>
+
+  <div class="tabs" style="margin-top:18px"><div class="on">LIMITS</div><div>PENDING · 1</div></div>
+
+  <div style="margin-top:6px">
+    <div class="row">
+      <div class="icon app" data-app="instagram"></div>
+      <div class="grow">
+        <div style="display:flex;justify-content:space-between"><span class="name">Instagram</span><span class="mono" style="font-size:13px;font-weight:700">12M / 20M</span></div>
+        <div class="bar" data-n="13"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="icon app locked" data-app="youtube"></div>
+      <div class="grow">
+        <div style="display:flex;justify-content:space-between"><span class="name red">YouTube</span><span class="lk red" data-ico="lock" aria-label="Locked"></span></div>
+        <div class="bar red" data-n="20"></div>
+        <div class="label" style="margin-top:6px">30M / 30M · opens 00:00</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="icon app" data-app="reddit"></div>
+      <div class="grow">
+        <div style="display:flex;justify-content:space-between"><span class="name">Reddit</span><span class="mono" style="font-size:13px;font-weight:700">5M / 15M</span></div>
+        <div class="bar" data-n="7"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grow"></div>
+  <div class="btn">[ + Add app ]</div>
+</div>
+<script src="enough.js"></script><script src="icons.js"></script>
+</body></html>

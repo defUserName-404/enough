@@ -46,14 +46,14 @@ Needs: Android 11+, no accounts, one user. Takes about 10 minutes.
 
 ## C. In-app update
 
-1. Open Enough → **▪▪** → **CHECK FOR UPDATE**.
+1. Open Enough → gear → **CHECK FOR UPDATE** (a launch-time check also shows an UPDATE banner on Home).
 2. With a newer release published: **UPDATE TO x.y.z**. Expect download,
    SHA-256 check, install prompt, limits kept afterwards.
 3. With no newer release: expect "up to date", no error.
 
 ## D. Uninstall flow
 
-1. **▪▪** → **START UNINSTALL · 24H**. Expect a 24h countdown, cancel works.
+1. Gear → **START UNINSTALL · 24H**. Expect a 24h countdown, cancel works.
 2. (Optional, needs 24h) After the wait: notification "ENOUGH IS OFF · YOU CAN
    UNINSTALL IT NOW", then uninstall normally.
 

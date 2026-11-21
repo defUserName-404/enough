@@ -42,6 +42,8 @@ import app.enough.ui.EditLimitSheet
 import app.enough.ui.ErrorScreen
 import app.enough.ui.ReleasingScreen
 import app.enough.ui.HomeScreen
+import app.enough.ui.SettingsScreen
+import app.enough.ui.UsageScreen
 import app.enough.ui.OnboardingAppsScreen
 import app.enough.ui.OnboardingLockScreen
 import app.enough.ui.PhoneSetupUi
@@ -55,7 +57,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-enum class Screen { APPS, LOCK, HOME, ADD }
+enum class Screen { APPS, LOCK, HOME, ADD, SETTINGS, USAGE }
 
 class MainActivity : ComponentActivity() {
     private val resumeTick = mutableIntStateOf(0)
@@ -110,6 +112,8 @@ class MainActivity : ComponentActivity() {
 
         var setupStep by rememberSaveable { mutableStateOf<Screen?>(null) }
         var adding by rememberSaveable { mutableStateOf(false) }
+        var homeSub by rememberSaveable { mutableStateOf<Screen?>(null) } // SETTINGS / USAGE over Home
+        var launchChecked by rememberSaveable { mutableStateOf(false) }
         var editing by remember { mutableStateOf<Target?>(null) }
         var editingNew by remember { mutableStateOf(false) }
         val setupView by graph.setup.view.collectAsState()
@@ -120,7 +124,7 @@ class MainActivity : ComponentActivity() {
                 Phase.RELEASING -> while (!controller.runRelease()) delay(5_000)
                 Phase.ACTIVE -> { setupStep = null; controller.startService() }
                 Phase.SETUP -> {
-                    adding = false; editing = null
+                    adding = false; editing = null; homeSub = null
                     if (graph.policy.isActive()) {
                         // Same gate as the lock screen: never while adb-off is pending.
                         while (!graph.setup.canActivate()) delay(1_000)
@@ -133,13 +137,14 @@ class MainActivity : ComponentActivity() {
         if (cfg.phase == Phase.RELEASING) { ReleasingScreen(cfg.releaseFailed); return }
 
         val screen = when (cfg.phase) {
-            Phase.ACTIVE -> if (adding) Screen.ADD else Screen.HOME
+            Phase.ACTIVE -> if (adding) Screen.ADD else homeSub ?: Screen.HOME
             else -> setupStep ?: if (cfg.targets.isEmpty()) Screen.APPS else Screen.LOCK
         }
 
         BackHandler(enabled = editing != null) { editing = null }
         BackHandler(enabled = screen == Screen.LOCK) { setupStep = Screen.APPS }
         BackHandler(enabled = screen == Screen.ADD) { adding = false }
+        BackHandler(enabled = screen == Screen.SETTINGS || screen == Screen.USAGE) { homeSub = null }
 
         // Picker list, loaded on IO.
         var apps by remember { mutableStateOf<List<AppInfo>>(emptyList()) }
@@ -201,7 +206,7 @@ class MainActivity : ComponentActivity() {
                     onBack = { adding = false },
                 )
             }
-            Screen.HOME -> {
+            Screen.HOME, Screen.SETTINGS, Screen.USAGE -> {
                 var usage by remember { mutableStateOf<UsageSnapshot?>(UsageSnapshot(emptyMap(), null)) }
                 var now by remember { mutableStateOf(Instant.now()) }
                 var tab by rememberSaveable { mutableIntStateOf(0) }
@@ -247,19 +252,36 @@ class MainActivity : ComponentActivity() {
                     val e = editing
                     if (e != null && editingNew && cfg.target(e.pkg) != null) editing = null
                 }
-                HomeScreen(
-                    config = cfg, usage = usage, labels = labels, now = now,
-                    onEdit = { editing = it; editingNew = false },
-                    onAdd = { adding = true },
-                    onCancel = { id -> scope.launch { controller.cancel(id) } },
-                    onRelease = { scope.launch { controller.submit(Change.Release) } },
-                    updateState = updateState,
-                    onCheckUpdate = { scope.launch { graph.updater.check() } },
-                    onInstallUpdate = { info -> scope.launch { graph.updater.install(info) } },
-                    history = history, noAccess = historyNoAccess, tab = tab, onTab = { tab = it },
-                    unpickable = unpickable,
-                    onSetLimit = { pkg -> editing = Target(pkg, 30); editingNew = true },
-                )
+                // Silent update check once per launch; the Home banner appears only if a newer release exists.
+                LaunchedEffect(Unit) {
+                    if (!launchChecked) { launchChecked = true; graph.updater.check() }
+                }
+                when (screen) {
+                    Screen.SETTINGS -> SettingsScreen(
+                        config = cfg, updateState = updateState,
+                        onCheckUpdate = { scope.launch { graph.updater.check() } },
+                        onInstallUpdate = { info -> scope.launch { graph.updater.install(info) } },
+                        onRelease = { scope.launch { controller.submit(Change.Release) } },
+                        onBack = { homeSub = null },
+                    )
+                    Screen.USAGE -> UsageScreen(
+                        history = history, noAccess = historyNoAccess, labels = labels, config = cfg,
+                        used = usage?.usage, now = now, unpickable = unpickable,
+                        onSetLimit = { pkg -> editing = Target(pkg, 30); editingNew = true },
+                        onBack = { homeSub = null },
+                    )
+                    else -> HomeScreen(
+                        config = cfg, usage = usage, labels = labels, now = now,
+                        onEdit = { editing = it; editingNew = false },
+                        onAdd = { adding = true },
+                        onCancel = { id -> scope.launch { controller.cancel(id) } },
+                        updateState = updateState,
+                        onInstallUpdate = { info -> scope.launch { graph.updater.install(info) } },
+                        history = history, tab = tab, onTab = { tab = it },
+                        onOpenSettings = { homeSub = Screen.SETTINGS },
+                        onOpenUsage = { homeSub = Screen.USAGE },
+                    )
+                }
                 editing?.let { t ->
                     val key = "pkg:${t.pkg}"
                     EditLimitSheet(
