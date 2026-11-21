@@ -27,6 +27,7 @@ import app.enough.ui.components.BtnStyle
 import app.enough.ui.components.EnoughBox
 import app.enough.ui.components.EnoughButton
 import app.enough.ui.components.InvertBox
+import app.enough.ui.components.ProgressRing
 import app.enough.ui.components.Txt
 import app.enough.ui.theme.Dims
 import app.enough.ui.theme.EnoughType
@@ -109,12 +110,21 @@ private fun UpdateBox(state: UpdateState, onCheck: () -> Unit, onInstall: (Relea
         Txt("${S.UPDATE_VERSION} ${BuildConfig.VERSION_NAME}", EnoughType.body.copy(fontSize = 13.5.sp), c.dim, Modifier.padding(top = 6.dp))
         val (line, red) = when (state) {
             UpdateState.UpToDate -> S.UPDATE_UP_TO_DATE to false
-            is UpdateState.Downloading -> "${S.UPDATE_DOWNLOADING} ${state.percent}%" to false
             UpdateState.Installing -> S.UPDATE_INSTALLING to false
             is UpdateState.Failed -> state.message to true
             else -> null to false
         }
         if (line != null) Txt(line, EnoughType.body.copy(fontSize = 13.5.sp), if (red) c.red else c.fg, Modifier.padding(top = 6.dp))
+        if (state is UpdateState.Downloading) {
+            Row(Modifier.fillMaxWidth().padding(top = 14.dp), verticalAlignment = Alignment.CenterVertically) {
+                ProgressRing(state.percent, 64.dp)
+                Column(Modifier.padding(start = 16.dp)) {
+                    Txt(S.UPDATE_DOWNLOADING, EnoughType.label.copy(fontSize = 12.sp), c.fg)
+                    Txt(S.UPDATE_KEEP_OPEN, EnoughType.body.copy(fontSize = 13.5.sp), c.dim, Modifier.padding(top = 4.dp))
+                }
+            }
+            return@EnoughBox
+        }
         val busy = state is UpdateState.Checking || state is UpdateState.Downloading || state == UpdateState.Installing
         val (label, action) = when (state) {
             is UpdateState.Available -> "${S.UPDATE_INSTALL} ${state.info.version}" to { onInstall(state.info) }

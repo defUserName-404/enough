@@ -82,3 +82,6 @@ body.light .scrim { background:rgba(255,255,255,.82); }
 .lk { display:inline-flex; align-items:center; }
 .lk svg { width:16px; height:16px; }
 .lim .lk { margin-right:6px; vertical-align:-2px; } .lim .lk svg { width:12px; height:12px; }
+.ring { position:relative; flex:none; display:grid; place-items:center; }
+.ring svg { position:absolute; inset:0; }
+.ring span { position:relative; font-weight:700; font-size:13px; }

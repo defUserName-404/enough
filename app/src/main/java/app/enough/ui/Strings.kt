@@ -43,6 +43,7 @@ object S {
     const val SETTINGS_DESC = "SETTINGS"
     const val UPDATE_AVAILABLE = "UPDATE AVAILABLE"
     const val UPDATE_BTN = "UPDATE"
+    const val UPDATE_KEEP_OPEN = "INSTALLS WHEN DONE"
     const val REMOVE_PENDING = "REMOVE"
     const val CANCEL = "CANCEL"
     const val ADD_APP_BTN = "[ + ADD APP ]"

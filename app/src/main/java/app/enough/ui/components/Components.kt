@@ -306,3 +306,31 @@ fun LockIcon(tint: Color, size: androidx.compose.ui.unit.Dp, modifier: Modifier 
         drawPath(shackle, tint, style = androidx.compose.ui.graphics.drawscope.Stroke(sw))
     }
 }
+
+/** Rounded circular progress with the percentage inside (download progress). */
+@Composable
+fun ProgressRing(percent: Int, size: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
+    val c = LocalEnoughColors.current
+    val pct = percent.coerceIn(0, 100)
+    val sweep by androidx.compose.animation.core.animateFloatAsState(pct * 3.6f, label = "ring")
+    Box(
+        modifier.size(size).semantics {
+            progressBarRangeInfo = ProgressBarRangeInfo(pct / 100f, 0f..1f)
+            contentDescription = "Downloading $pct percent"
+        },
+        contentAlignment = Alignment.Center,
+    ) {
+        androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) {
+            val sw = 5.dp.toPx()
+            val inset = sw / 2f
+            val arcSize = androidx.compose.ui.geometry.Size(this.size.width - sw, this.size.height - sw)
+            val topLeft = androidx.compose.ui.geometry.Offset(inset, inset)
+            drawArc(c.line, 0f, 360f, false, topLeft, arcSize, style = androidx.compose.ui.graphics.drawscope.Stroke(sw))
+            drawArc(
+                c.fg, -90f, sweep, false, topLeft, arcSize,
+                style = androidx.compose.ui.graphics.drawscope.Stroke(sw, cap = androidx.compose.ui.graphics.StrokeCap.Round),
+            )
+        }
+        Txt("$pct%", EnoughType.num.copy(fontSize = 13.sp), c.fg)
+    }
+}
