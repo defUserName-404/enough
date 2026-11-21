@@ -1,0 +1,47 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="clamp.css">
+<style>
+  /* system UI behind (not Clamp-styled on purpose) */
+  .sys { position:absolute; inset:0; background:#1b1b1d; font-family:-apple-system,'Helvetica Neue',sans-serif; color:#e6e6e6; }
+  .sys .title { font-size:22px; padding:96px 24px 8px; }
+  .sys .item { padding:16px 24px; border-bottom:1px solid #2a2a2d; font-size:15px; color:#bdbdbd; }
+  .dialog { position:absolute; left:28px; right:28px; top:330px; background:#2a2a2e; border-radius:22px; padding:24px; font-family:-apple-system,'Helvetica Neue',sans-serif; }
+  .dialog .h { font-size:19px; color:#fff; }
+  .dialog .l { font-size:13px; color:#9a9a9f; margin-top:18px; }
+  .dialog .code { font-size:34px; letter-spacing:6px; color:#fff; margin-top:6px; font-weight:600; }
+  .dialog .ip { font-size:13px; color:#9a9a9f; margin-top:14px; }
+  .dialog .cancel { text-align:right; color:#8ab4f8; margin-top:22px; font-size:15px; }
+  .shade { position:absolute; left:0; right:0; top:0; height:250px; background:rgba(10,10,12,.92); }
+  .notif { position:absolute; left:12px; right:12px; top:58px; background:#000; border:2px solid #fff; padding:16px; }
+  .pinin { display:flex; margin-top:12px; border:2px solid #fff; height:50px; }
+  .pinin .f { flex:1; display:flex; align-items:center; padding:0 12px; font:800 22px 'JetBrains Mono',monospace; letter-spacing:5px; color:#fff; }
+  .pinin .b { width:96px; display:grid; place-items:center; background:#fff; color:#000; font:800 13px 'JetBrains Mono',monospace; letter-spacing:2px; }
+  .tag { position:absolute; bottom:40px; left:20px; right:20px; }
+</style></head>
+<body>
+<div class="sys">
+  <div class="title">Wireless debugging</div>
+  <div class="item">Use wireless debugging</div>
+  <div class="item">Device name · Redmi Note</div>
+  <div class="item">IP address &amp; port · 192.168.1.23:41877</div>
+  <div class="item">Pair device with pairing code</div>
+  <div class="item">Pair device with QR code</div>
+</div>
+<div class="dialog">
+  <div class="h">Pair with device</div>
+  <div class="l">Wi-Fi pairing code</div>
+  <div class="code">482915</div>
+  <div class="ip">IP address &amp; port<br>192.168.1.23:37145</div>
+  <div class="cancel">Cancel</div>
+</div>
+<div class="shade"></div>
+<div class="notif">
+  <div style="display:flex;justify-content:space-between"><span class="label" style="color:#fff">Enough · setup</span><span class="label">now</span></div>
+  <div class="name" style="margin-top:8px;color:#fff">Enter the pairing code</div>
+  <div class="pinin"><div class="f">482915<span class="cursor" style="margin-left:4px;background:#fff"></span></div><div class="b">PAIR</div></div>
+</div>
+<div class="tag">
+  <div class="label" style="color:#fff">How it works</div>
+  <div class="body" style="margin-top:6px;font-size:13.5px;color:#cfcfcf">Pull down the shade while the pairing dialog is open. Type the code into Enough's notification. The dialog stays open, so the code stays valid.</div>
+</div>
+<script src="clamp.js"></script>
+</body></html>
