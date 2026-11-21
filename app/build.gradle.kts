@@ -28,7 +28,7 @@ val signing: Map<String, String?> = run {
 val canSignRelease = signing.values.all { !it.isNullOrBlank() }
 
 android {
-    namespace = "dev.clamp"
+    namespace = "app.enough"
     compileSdk = 34
 
     defaultConfig {

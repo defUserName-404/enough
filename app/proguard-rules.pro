@@ -17,4 +17,4 @@
 -dontwarn javax.naming.**
 -keepclasseswithmembernames class * { native <methods>; }
 # Device admin receiver is referenced from the manifest and by the dpm component string.
--keep class dev.clamp.admin.ClampAdminReceiver
+-keep class app.enough.admin.EnoughAdminReceiver

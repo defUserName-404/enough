@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Clamp"
+rootProject.name = "Enough"
 include(":app")
