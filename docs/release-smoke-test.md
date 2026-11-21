@@ -54,7 +54,7 @@ Needs: Android 11+, no accounts, one user. Takes about 10 minutes.
 ## D. Uninstall flow
 
 1. Gear → **START UNINSTALL · 24H**. Expect a 24h countdown, cancel works.
-2. (Optional, needs 24h) After the wait: notification "ENOUGH IS OFF · YOU CAN
+2. (Optional, needs 24h) After the wait: notification "OFF · YOU CAN
    UNINSTALL IT NOW", then uninstall normally.
 
 ## E. Quick log check (needs a computer, any phone)

@@ -44,7 +44,7 @@ Android only lets an app become "device owner", which is what makes it impossibl
 
 1. Open Enough, tap the gear (top right), then **START UNINSTALL · 24H**.
 2. Wait 24 hours. You can cancel during that time.
-3. Enough turns off all blocks and its own protection, and notifies you: "ENOUGH IS OFF · YOU CAN UNINSTALL IT NOW". Then long-press the app icon and uninstall it like any other app.
+3. Enough turns off all blocks and its own protection, and notifies you: "OFF · YOU CAN UNINSTALL NOW". Then long-press the app icon and uninstall it like any other app.
 
 If you are completely stuck, a factory reset from recovery always works. Enough deliberately doesn't block that.
 
