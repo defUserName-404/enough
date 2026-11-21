@@ -37,6 +37,7 @@ import app.enough.core.UsageSnapshot
 import androidx.compose.runtime.produceState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import app.enough.service.Notifier
 import app.enough.usage.HistoryResult
 import app.enough.ui.EditLimitSheet
 import app.enough.ui.ErrorScreen
@@ -75,6 +76,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent { EnoughTheme { Box(Modifier.fillMaxSize().systemBarsPadding()) { Root() } } }
+        if (savedInstanceState == null) handleIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    // Revoked-access notification lands here (explicit PendingIntent), then we open usage settings.
+    private fun handleIntent(intent: Intent) {
+        if (intent.action == Notifier.ACTION_OPEN_USAGE) {
+            intent.action = null // don't re-run on recreation
+            openUsageSettings()
+        }
     }
 
     override fun onResume() {
