@@ -15,7 +15,7 @@ import java.time.Duration
 import java.time.Instant
 import kotlin.coroutines.cancellation.CancellationException
 
-// TODO(device): event latency; whether MIUI emits ACTIVITY_PAUSED reliably for floating windows / split screen;
+// Unverified on MIUI/HyperOS (release-smoke-test.md section F): event latency, ACTIVITY_PAUSED for floating windows / split screen.
 // Dual-apps events (user 999) are not visible to user 0.
 class UsageReader(private val ctx: Context) : UsagePort {
     companion object {

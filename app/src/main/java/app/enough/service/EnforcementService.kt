@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.cancellation.CancellationException
 
-// TODO(device): whether MIUI kills a specialUse FGS despite autostart; whether LOCKED_BOOT_COMPLETED arrives on MIUI.
+// Unverified on MIUI: FGS kill despite autostart, LOCKED_BOOT_COMPLETED delivery (release-smoke-test.md section F). AOSP emulator: survives reboot.
 class EnforcementService : Service() {
     companion object {
         const val ACTION_TICK = "app.enough.TICK"

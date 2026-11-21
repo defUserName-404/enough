@@ -48,7 +48,7 @@ class OemHelper(private val ctx: Context) {
         }
     }
 
-    // TODO(device): MIUI battery saver state is separate from the Doze whitelist
+    // Unverified on MIUI: its battery saver state is separate from the Doze whitelist (release-smoke-test.md section F).
     fun batteryUnrestricted(): Boolean =
         ctx.getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(ctx.packageName)
 }

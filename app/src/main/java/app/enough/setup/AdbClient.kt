@@ -18,9 +18,8 @@ import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeoutOrNull
 
-// TODO(device): MIUI may require "USB debugging (Security settings)" for dpm over wireless adb
-//   -> NEEDS_SECURITY_SETTINGS / WITH A COMPUTER.
-// TODO(device): conscrypt-android as TLS provider (exportKeyingMaterial) on MIUI/HyperOS; no hidden-API tricks.
+// Unverified on MIUI/HyperOS (release-smoke-test.md section F): whether "USB debugging (Security settings)" is needed for dpm over
+// wireless adb (-> NEEDS_SECURITY_SETTINGS / WITH A COMPUTER), and conscrypt-android as the TLS provider.
 /** AdbPort over libadb. No host parameter anywhere: every socket targets AdbSetup.HOST. */
 class AdbClient(private val ctx: Context) : AdbPort {
     private val keys = AdbKeys(File(ctx.noBackupFilesDir, "adb"))

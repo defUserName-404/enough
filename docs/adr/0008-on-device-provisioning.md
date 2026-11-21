@@ -22,5 +22,5 @@ The computer adb path stays as a fallback tab.
   - `org.conscrypt:conscrypt-android` for TLS 1.3. It was chosen over the hidden-API route through platform Conscrypt, because the one-shot setup has to be reliable on OEM ROMs.
 - ABIs are limited to arm64-v8a and armeabi-v7a. The APK grows by several MB. R8 shrinking for release is a separate task.
 - Accounts still have to be removed before setup, because Android enforces that for every adb path.
-- MIUI/HyperOS behavior is unverified: mDNS, RemoteInput, and whether "USB debugging (Security settings)" is needed. These are marked `TODO(device)`, with a fallback to the computer tab.
+- MIUI/HyperOS behavior is unverified: mDNS, RemoteInput, and whether "USB debugging (Security settings)" is needed. They are tracked in the Xiaomi/HyperOS checklist in `docs/release-smoke-test.md` (section F) and marked "Unverified" in code, with a fallback to the computer tab.
 - After activation, Enough turns Wireless debugging off itself; it does not re-apply `DISALLOW_DEBUGGING_FEATURES`, so developer options stay available.

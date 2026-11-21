@@ -11,7 +11,7 @@ data class OemSpec(
 )
 
 object OemTable {
-    // TODO(device): verify every bestEffort component name; HyperOS autostart activity path; MIUI battery extras.
+    // Unverified on MIUI/HyperOS: bestEffort component names, HyperOS autostart path, MIUI battery extras (release-smoke-test.md section F).
     fun specsFor(manufacturer: String, brand: String): List<OemSpec> {
         val keys = setOf(manufacturer.lowercase(), brand.lowercase())
         fun any(vararg n: String) = n.any { it in keys }

@@ -22,7 +22,7 @@ class AppCatalog(private val ctx: Context) {
     /**
      * Packages that must not be picked. No public API probes suspendability, so [Config.unsuspendable]
      * (packages DPM refused at runtime) is the only dynamic signal.
-     * TODO(device): other OEM launchers / system UIs beyond the MIUI ones below.
+     * Unverified: other OEM launchers / system UIs beyond the MIUI ones below (release-smoke-test.md section F).
      */
     @Suppress("DEPRECATION")
     fun unpickable(config: Config): Set<String> {

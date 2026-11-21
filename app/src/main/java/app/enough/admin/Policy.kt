@@ -32,7 +32,7 @@ class Policy(private val ctx: Context) : DevicePort {
         RESTRICTIONS.map { it to LABELS.getValue(it) }
 
     /** Applies everything, then verifies. Returns labels of what is missing. Idempotent. */
-    // TODO(device): verify each step on HyperOS
+    // Unverified on HyperOS: each step (release-smoke-test.md section F). AOSP emulator: nothing missing.
     override fun applyProtection(): List<String> {
         step("uninstallBlocked") { dpm.setUninstallBlocked(admin, self, true) }
         step("userControlDisabled") { dpm.setUserControlDisabledPackages(admin, listOf(self)) }
@@ -67,7 +67,7 @@ class Policy(private val ctx: Context) : DevicePort {
         return missing.filterNotNull().also { if (it.isNotEmpty()) Log.w("Enough", "protection missing: $it") }
     }
 
-    // TODO(device): which packages MIUI refuses (securitycenter, miui.home?); "App paused" dialog behaviour.
+    // Unverified on MIUI: which packages it refuses (securitycenter, miui.home?) and the "App paused" dialog (release-smoke-test.md section F).
     override fun setSuspended(pkgs: Collection<String>, suspended: Boolean): SuspendResult {
         // Never suspend Enough itself — picker excludes it, this is the hard safety net.
         val filtered = pkgs.filter { it != self }
