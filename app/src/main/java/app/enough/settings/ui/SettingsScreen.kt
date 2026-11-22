@@ -32,7 +32,7 @@ import app.enough.common.ui.theme.EnoughType
 import app.enough.common.ui.theme.LocalEnoughColors
 import app.enough.limits.domain.Change
 import app.enough.limits.domain.Config
-import app.enough.update.android.UpdateState
+import app.enough.update.domain.UpdateState
 import app.enough.update.domain.ReleaseInfo
 import kotlin.math.cos
 import kotlin.math.sin
@@ -75,13 +75,14 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawGear(tint: Colo
 
 @Composable
 fun SettingsScreen(
-    config: Config,
-    updateState: UpdateState,
+    state: SettingsUiState,
     onCheckUpdate: () -> Unit,
     onInstallUpdate: (ReleaseInfo) -> Unit,
     onRelease: () -> Unit,
     onBack: () -> Unit,
 ) {
+    val config = state.config
+    val updateState = state.updateState
     val c = LocalEnoughColors.current
     val releasePending = config.pending.any { it.change is Change.Release }
     Column(Modifier.fillMaxSize().padding(horizontal = Dims.Pad)) {

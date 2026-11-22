@@ -8,6 +8,7 @@ import android.os.Build
 import app.enough.BuildConfig
 import app.enough.update.domain.ReleaseInfo
 import app.enough.update.domain.UpdateCheck
+import app.enough.update.domain.UpdateState
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
@@ -16,16 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
-
-sealed interface UpdateState {
-    data object Idle : UpdateState
-    data object Checking : UpdateState
-    data object UpToDate : UpdateState
-    data class Available(val info: ReleaseInfo) : UpdateState
-    data class Downloading(val percent: Int) : UpdateState
-    data object Installing : UpdateState
-    data class Failed(val message: String) : UpdateState
-}
 
 /**
  * The only networking in the app besides the loopback adb client. Runs only when the user taps

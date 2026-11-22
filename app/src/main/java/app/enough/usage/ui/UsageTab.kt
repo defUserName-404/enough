@@ -252,16 +252,17 @@ private fun Sparkline(values: List<Duration>, color: Color, height: Dp = 26.dp) 
 /** Standalone Usage screen, opened from the Home "USAGE →" link. */
 @Composable
 fun UsageScreen(
-    history: History?,
-    noAccess: Boolean,
-    labels: Map<String, String>,
-    config: Config,
-    used: Map<String, Duration>?,
-    now: Instant,
-    unpickable: Set<String>,
+    state: UsageUiState,
     onSetLimit: (String) -> Unit,
     onBack: () -> Unit,
 ) {
+    val history = state.history
+    val noAccess = state.noAccess
+    val labels = state.labels
+    val config = state.config
+    val used = state.used
+    val now = state.now
+    val unpickable = state.unpickable
     val c = LocalEnoughColors.current
     Column(Modifier.fillMaxSize().padding(horizontal = Dims.Pad)) {
         BackHeader(S.USAGE_TITLE, onBack)

@@ -41,15 +41,16 @@ import java.time.Instant
 
 @Composable
 fun EditLimitSheet(
-    target: Target,
-    label: String,
-    pending: PendingChange?,
-    now: Instant,
+    state: EditLimitUiState,
     onSubmit: (Int) -> Unit,
     onRemove: () -> Unit,
     onClose: () -> Unit,
-    isNew: Boolean = false,
 ) {
+    val target = state.target
+    val label = state.label
+    val pending = state.pending
+    val now = state.now
+    val isNew = state.isNew
     val c = LocalEnoughColors.current
     var value by remember(target.pkg, isNew) { mutableIntStateOf(target.limitMin) }
     val raising = !isNew && value > target.limitMin

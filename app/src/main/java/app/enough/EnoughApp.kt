@@ -10,6 +10,8 @@ import app.enough.update.android.Updater
 import app.enough.usage.android.AppCatalog
 import app.enough.usage.android.HistoryReader
 import app.enough.usage.android.UsageReader
+import app.enough.usage.android.UsageFeed
+import app.enough.setup.android.SetupEnv
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -35,5 +37,7 @@ class Graph(app: Application) {
     val history by lazy { HistoryReader(usage, catalog) }
     val setup by lazy { SetupSession(app) }
     val updater by lazy { Updater(app) }
+    val usageFeed by lazy { UsageFeed(usage, history, catalog, store.flow, appScope) }
+    val setupEnv by lazy { SetupEnv(app) }
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 }

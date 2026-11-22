@@ -43,7 +43,7 @@ import app.enough.limits.domain.Config
 import app.enough.limits.domain.PendingChange
 import app.enough.limits.domain.Target
 import app.enough.settings.ui.GearButton
-import app.enough.update.android.UpdateState
+import app.enough.update.domain.UpdateState
 import app.enough.update.domain.ReleaseInfo
 import app.enough.usage.domain.History
 import app.enough.usage.domain.UsageSnapshot
@@ -57,21 +57,22 @@ private val DATE_FMT = DateTimeFormatter.ofPattern("EEE d MMM", Locale.ENGLISH)
 
 @Composable
 fun HomeScreen(
-    config: Config,
-    usage: UsageSnapshot?,
-    labels: Map<String, String>,
-    now: Instant,
+    state: HomeUiState,
     onEdit: (Target) -> Unit,
     onAdd: () -> Unit,
     onCancel: (String) -> Unit,
-    updateState: UpdateState,
     onInstallUpdate: (ReleaseInfo) -> Unit,
-    history: History?,
-    tab: Int,
     onTab: (Int) -> Unit,
     onOpenSettings: () -> Unit,
     onOpenUsage: () -> Unit,
 ) {
+    val config = state.config
+    val usage = state.usage
+    val labels = state.labels
+    val now = state.now
+    val updateState = state.updateState
+    val history = state.history
+    val tab = state.tab
     val c = LocalEnoughColors.current
     val used = usage?.usage
     val limitedTotal = config.targets.fold(Duration.ZERO) { a, t -> a + (used?.get(t.pkg) ?: Duration.ZERO) }

@@ -61,12 +61,13 @@ private val selectionSaver = listSaver<SnapshotStateMap<String, Int>, String>(
 
 @Composable
 fun OnboardingAppsScreen(
-    mode: PickerMode,
-    initial: List<Target>,
-    apps: List<AppInfo>,
+    state: PickerUiState,
     onDone: (List<Target>) -> Unit,
     onBack: (() -> Unit)?,
 ) {
+    val mode = state.mode
+    val initial = state.initial
+    val apps = state.apps
     val c = LocalEnoughColors.current
     var query by rememberSaveable { mutableStateOf("") }
     val sel = rememberSaveable(saver = selectionSaver) {

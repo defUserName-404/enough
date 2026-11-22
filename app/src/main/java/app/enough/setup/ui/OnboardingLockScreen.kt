@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -23,12 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.enough.EnoughApp
 import app.enough.common.ui.S
 import app.enough.common.ui.components.BtnStyle
 import app.enough.common.ui.components.EnoughButton
@@ -40,11 +37,10 @@ import app.enough.common.ui.components.plainClickable
 import app.enough.common.ui.theme.Dims
 import app.enough.common.ui.theme.EnoughType
 import app.enough.common.ui.theme.LocalEnoughColors
-import app.enough.oem.android.OemItem
+import app.enough.oem.domain.OemSpec
 import app.enough.setup.domain.SetupMachine
 import app.enough.setup.domain.SetupState
 import app.enough.setup.domain.SetupView
-import kotlinx.coroutines.delay
 
 data class PhoneSetupUi(
     val wifi: Boolean,
@@ -56,37 +52,22 @@ data class PhoneSetupUi(
 
 @Composable
 fun OnboardingLockScreen(
-    usageGranted: Boolean,
-    oemItems: List<OemItem>,
-    oemDone: Set<String>,
-    phone: PhoneSetupUi,
+    state: SetupUiState,
     onUsage: () -> Unit,
-    onOem: (OemItem) -> Unit,
+    onOem: (OemSpec) -> Unit,
     onAccountsToggle: () -> Unit,
     onOpenAccounts: () -> Unit,
     onOpenDevSettings: () -> Unit,
     onPair: () -> Unit,
     onCancelSetup: () -> Unit,
     onBack: () -> Unit,
-    onActivated: () -> Unit,
 ) {
+    val usageGranted = state.usageGranted
+    val oemItems = state.oemItems
+    val oemDone = state.oemDone
+    val phone = state.phone
     val c = LocalEnoughColors.current
-    val graph = (LocalContext.current.applicationContext as EnoughApp).graph
     var tab by rememberSaveable { mutableIntStateOf(0) } // 0 = phone (default), 1 = computer
-
-    // Usage access is required first, otherwise activation would instantly fail closed.
-    // The setup gate guarantees adb wifi goes off before activation applies the other restrictions.
-    LaunchedEffect(usageGranted) {
-        if (!usageGranted) return@LaunchedEffect
-        while (true) {
-            if (graph.policy.isActive() && graph.setup.canActivate()) {
-                graph.controller.onDeviceOwnerDetected()
-                onActivated()
-                break
-            }
-            delay(2_000)
-        }
-    }
 
     Column(Modifier.fillMaxSize().padding(horizontal = Dims.Pad)) {
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
@@ -105,18 +86,18 @@ fun OnboardingLockScreen(
                     }
                     if (!usageGranted) EnoughButton(S.OPEN, onUsage, small = true)
                 }
-                oemItems.forEach { item ->
-                    val done = item.spec.id in oemDone
+                oemItems.forEach { spec ->
+                    val done = spec.id in oemDone
                     EnoughRow {
                         EnoughCheckBox(done)
                         Column(Modifier.weight(1f)) {
-                            Txt(item.spec.title, EnoughType.name)
+                            Txt(spec.title, EnoughType.name)
                             Txt(
-                                if (done) item.spec.subtitle.replace("REQUIRED", "ENABLED") else item.spec.subtitle,
+                                if (done) spec.subtitle.replace("REQUIRED", "ENABLED") else spec.subtitle,
                                 EnoughType.label, c.dim, Modifier.padding(top = 4.dp),
                             )
                         }
-                        if (!done) EnoughButton(S.OPEN, { onOem(item) }, small = true)
+                        if (!done) EnoughButton(S.OPEN, { onOem(spec) }, small = true)
                     }
                 }
             }

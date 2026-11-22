@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInstaller
 import app.enough.EnoughApp
+import app.enough.update.domain.UpdateState
 
 /** Receives the PackageInstaller result. Silent for the device owner; otherwise asks the system to show its prompt. */
 class UpdateReceiver : BroadcastReceiver() {
