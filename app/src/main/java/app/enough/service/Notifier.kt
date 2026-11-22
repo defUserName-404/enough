@@ -10,7 +10,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.RemoteInput
@@ -24,7 +23,7 @@ import app.enough.core.NotifyPort
 import app.enough.usage.AppCatalog
 import java.time.Duration
 
-// TODO(device): whether the POST_NOTIFICATIONS self-grant works on MIUI
+// Unverified on MIUI: whether the POST_NOTIFICATIONS self-grant works (release-smoke-test.md section F). AOSP emulator: granted.
 class Notifier(private val ctx: Context, private val catalog: AppCatalog) : NotifyPort {
     companion object {
         const val CH_SERVICE = "enforcement"
@@ -36,6 +35,7 @@ class Notifier(private val ctx: Context, private val catalog: AppCatalog) : Noti
         const val ID_SETUP = 5
         const val ID_RELEASED = 6
         const val KEY_CODE = "pair_code"
+        const val ACTION_OPEN_USAGE = "app.enough.OPEN_USAGE_ACCESS"
 
         fun ensureChannels(ctx: Context) {
             val nm = ctx.getSystemService(NotificationManager::class.java)
@@ -81,8 +81,13 @@ class Notifier(private val ctx: Context, private val catalog: AppCatalog) : Noti
             NotificationManagerCompat.from(ctx).cancel(ID_FAIL)
             return
         }
+        // Explicit intent to our own activity, which opens usage settings itself.
         val pi = PendingIntent.getActivity(
-            ctx, 1, Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            ctx, 1,
+            // Distinct action: an intent equal to the launcher intent (extras are ignored) only
+            // resumes the existing task and never reaches MainActivity.
+            Intent(ctx, MainActivity::class.java).setAction(ACTION_OPEN_USAGE)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP),
             PendingIntent.FLAG_IMMUTABLE,
         )
         val n = NotificationCompat.Builder(ctx, CH_ALERTS)

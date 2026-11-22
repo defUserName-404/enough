@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-// TODO(device): mDNS self-discovery on MIUI/HyperOS; if nothing is found in 5 min the TIMEOUT message points to WITH A COMPUTER.
+// Unverified on MIUI/HyperOS: mDNS self-discovery (release-smoke-test.md section F). If nothing is found in 5 min the TIMEOUT message points to WITH A COMPUTER.
 class NsdDiscovery(ctx: Context) : DiscoveryPort {
     private val nsd = ctx.getSystemService(NsdManager::class.java)
 
