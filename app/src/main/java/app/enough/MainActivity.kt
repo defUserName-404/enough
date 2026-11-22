@@ -21,35 +21,35 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import app.enough.core.AppInfo
-import app.enough.core.Change
-import app.enough.core.Enforcer
-import app.enough.core.Phase
-import app.enough.core.PickerFilter
-import app.enough.core.Target
-import app.enough.core.UsageSnapshot
-import androidx.compose.runtime.produceState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import app.enough.service.Notifier
-import app.enough.usage.HistoryResult
-import app.enough.ui.EditLimitSheet
-import app.enough.ui.ErrorScreen
-import app.enough.ui.ReleasingScreen
-import app.enough.ui.HomeScreen
-import app.enough.ui.SettingsScreen
-import app.enough.ui.UsageScreen
-import app.enough.ui.OnboardingAppsScreen
-import app.enough.ui.OnboardingLockScreen
-import app.enough.ui.PhoneSetupUi
-import app.enough.ui.PickerMode
-import app.enough.ui.theme.EnoughTheme
+import app.enough.common.ui.theme.EnoughTheme
+import app.enough.enforce.android.Notifier
+import app.enough.enforce.domain.Enforcer
+import app.enough.enforce.ui.ErrorScreen
+import app.enough.enforce.ui.ReleasingScreen
+import app.enough.home.ui.HomeScreen
+import app.enough.limits.domain.Change
+import app.enough.limits.domain.Phase
+import app.enough.limits.domain.Target
+import app.enough.limits.ui.EditLimitSheet
+import app.enough.limits.ui.OnboardingAppsScreen
+import app.enough.limits.ui.PickerMode
+import app.enough.settings.ui.SettingsScreen
+import app.enough.setup.ui.OnboardingLockScreen
+import app.enough.setup.ui.PhoneSetupUi
+import app.enough.usage.android.HistoryResult
+import app.enough.usage.domain.AppInfo
+import app.enough.usage.domain.PickerFilter
+import app.enough.usage.domain.UsageSnapshot
+import app.enough.usage.ui.UsageScreen
 import java.time.Clock
 import java.time.Instant
 import kotlinx.coroutines.Dispatchers
@@ -182,7 +182,7 @@ class MainActivity : ComponentActivity() {
                 val items = remember { graph.oem.items() }
                 val granted = remember(tick) { graph.usage.hasAccess() }
                 val done = oemDone.toSet() + items.filter { it.spec.id == "battery" && graph.oem.batteryUnrestricted() }.map { it.spec.id }
-                val env = remember { app.enough.setup.SetupEnv(this@MainActivity) }
+                val env = remember { app.enough.setup.android.SetupEnv(this@MainActivity) }
                 val wifi = remember(tick) { env.wifi() }
                 val adbWifi = remember(tick) { env.adbWifi() }
                 var accountsConfirmed by rememberSaveable { mutableStateOf(false) }
@@ -226,7 +226,7 @@ class MainActivity : ComponentActivity() {
                 var now by remember { mutableStateOf(Instant.now()) }
                 var tab by rememberSaveable { mutableIntStateOf(0) }
                 val updateState by graph.updater.state.collectAsState()
-                var history by remember { mutableStateOf<app.enough.core.History?>(null) }
+                var history by remember { mutableStateOf<app.enough.usage.domain.History?>(null) }
                 var historyNoAccess by remember { mutableStateOf(false) }
                 var historyLabels by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
                 // All Home loops run only while the activity is STARTED, and reload on every resume.
@@ -303,7 +303,7 @@ class MainActivity : ComponentActivity() {
                         target = cfg.target(t.pkg) ?: t,
                         label = labels[t.pkg] ?: t.pkg,
                         isNew = editingNew,
-                        pending = cfg.pending.firstOrNull { app.enough.core.ChangePolicy.keyOf(it.change) == key },
+                        pending = cfg.pending.firstOrNull { app.enough.limits.domain.ChangePolicy.keyOf(it.change) == key },
                         now = now,
                         onSubmit = { m -> scope.launch { controller.setLimit(t.pkg, m) }; editing = null },
                         onRemove = { scope.launch { controller.submit(Change.Remove(t.pkg)) }; editing = null },

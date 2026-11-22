@@ -5,13 +5,20 @@ Mockups: ../design/mockups/*.png
 ## 4. Design doc
 
 ### 4.1 Package layout (`app/src/main/java/app/enough/`)
+Feature-first. Each feature has up to three layers:
+`domain/` (pure Kotlin + its ports, JVM-tested), `android/` (adapters, services, receivers), `ui/` (Compose).
+`ArchitectureTest` fails the build if a `domain/` file imports `android.*`, `androidx.*`, `R`, or another feature's `android/` or `ui/`.
 ```
-core/      pure Kotlin: Config, PendingChange, ChangePolicy, Enforcer
-data/      ConfigStore (DataStore<Config>, JSON serializer)
-usage/     UsageReader (UsageStatsManager → Map<pkg, Duration>)
-admin/     EnoughAdminReceiver (DeviceAdminReceiver), Policy (wraps DevicePolicyManager)
-service/   EnforcementService (foreground), BootReceiver
-ui/        OnboardingAppsScreen, OnboardingLockScreen, HomeScreen, EditLimitSheet
+EnoughApp, MainActivity, Controller   app shell, wires ports to adapters
+admin/     EnoughAdminReceiver        PINNED: device owner is bound to app.enough/.admin.EnoughAdminReceiver; never move it
+limits/    domain: Config, Target, Change, ChangePolicy, ConfigPort · android: ConfigStore · ui: EditLimitSheet, OnboardingAppsScreen
+enforce/   domain: Enforcer, Ticker, Releaser, DevicePort, NotifyPort · android: EnforcementService, BootReceiver, Notifier, Policy · ui: StatusScreens
+usage/     domain: UsageFolder, UsageHistory, PickerFilter, UsagePort · android: UsageReader, HistoryReader, AppCatalog · ui: UsageTab
+setup/     domain: SetupMachine, SetupRunner, SelfSetup, Adb/Discovery/SetupEnv ports · android: AdbClient, NsdDiscovery, SetupService, … · ui: OnboardingLockScreen
+update/    domain: UpdateCheck · android: Updater, UpdateReceiver
+oem/       domain: OemTable · android: OemHelper
+home/ui, settings/ui                  HomeScreen, SettingsScreen
+common/    domain: Format · ui: Strings, components/, theme/
 ```
 Also `res/xml/device_admin.xml` and the receiver plus `android.app.device_admin` meta-data in `AndroidManifest.xml`.
 

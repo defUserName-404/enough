@@ -1,15 +1,15 @@
 package app.enough
 
 import android.app.Application
-import app.enough.admin.Policy
-import app.enough.data.ConfigStore
-import app.enough.oem.OemHelper
-import app.enough.service.Notifier
-import app.enough.setup.SetupSession
-import app.enough.usage.AppCatalog
-import app.enough.usage.UsageReader
-import app.enough.usage.HistoryReader
-import app.enough.update.Updater
+import app.enough.enforce.android.Notifier
+import app.enough.enforce.android.Policy
+import app.enough.limits.android.ConfigStore
+import app.enough.oem.android.OemHelper
+import app.enough.setup.android.SetupSession
+import app.enough.update.android.Updater
+import app.enough.usage.android.AppCatalog
+import app.enough.usage.android.HistoryReader
+import app.enough.usage.android.UsageReader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
