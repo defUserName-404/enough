@@ -47,7 +47,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".service.EnforcementService"
+            android:name=".enforce.android.EnforcementService"
             android:directBootAware="true"
             android:exported="false"
             android:foregroundServiceType="specialUse">
@@ -57,7 +57,7 @@
         </service>
 
         <service
-            android:name=".setup.SetupService"
+            android:name=".setup.android.SetupService"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property
@@ -66,15 +66,15 @@
         </service>
 
         <receiver
-            android:name=".update.UpdateReceiver"
+            android:name=".update.android.UpdateReceiver"
             android:exported="false" />
 
         <receiver
-            android:name=".setup.PairCodeReceiver"
+            android:name=".setup.android.PairCodeReceiver"
             android:exported="false" />
 
         <receiver
-            android:name=".service.BootReceiver"
+            android:name=".enforce.android.BootReceiver"
             android:directBootAware="true"
             android:exported="false">
             <intent-filter>

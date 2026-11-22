@@ -1,15 +1,17 @@
 package app.enough
 
 import android.app.Application
-import app.enough.admin.Policy
-import app.enough.data.ConfigStore
-import app.enough.oem.OemHelper
-import app.enough.service.Notifier
-import app.enough.setup.SetupSession
-import app.enough.usage.AppCatalog
-import app.enough.usage.UsageReader
-import app.enough.usage.HistoryReader
-import app.enough.update.Updater
+import app.enough.enforce.android.Notifier
+import app.enough.enforce.android.Policy
+import app.enough.limits.android.ConfigStore
+import app.enough.oem.android.OemHelper
+import app.enough.setup.android.SetupSession
+import app.enough.update.android.Updater
+import app.enough.usage.android.AppCatalog
+import app.enough.usage.android.HistoryReader
+import app.enough.usage.android.UsageReader
+import app.enough.usage.android.UsageFeed
+import app.enough.setup.android.SetupEnv
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -35,5 +37,7 @@ class Graph(app: Application) {
     val history by lazy { HistoryReader(usage, catalog) }
     val setup by lazy { SetupSession(app) }
     val updater by lazy { Updater(app) }
+    val usageFeed by lazy { UsageFeed(usage, history, catalog, store.flow, appScope) }
+    val setupEnv by lazy { SetupEnv(app) }
     val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 }
