@@ -7,22 +7,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,39 +31,30 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.enough.common.domain.axisLabel
 import app.enough.common.domain.dur
-import app.enough.common.domain.durMin
 import app.enough.common.ui.S
-import app.enough.common.ui.components.AppIcon
-import app.enough.common.ui.components.EnoughRow
 import app.enough.common.ui.components.Hairline
-import app.enough.common.ui.components.LockIcon
 import app.enough.common.ui.components.Txt
 import app.enough.common.ui.components.plainClickable
-import app.enough.common.ui.theme.Dims
 import app.enough.common.ui.theme.EnoughType
 import app.enough.common.ui.theme.LocalEnoughColors
 import app.enough.limits.domain.Config
-import app.enough.settings.ui.BackHeader
-import app.enough.usage.domain.AppHistory
 import app.enough.usage.domain.History
 import app.enough.usage.domain.Trend
 import java.time.Duration
 import java.time.Instant
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
-private val DESC_FMT = DateTimeFormatter.ofPattern("EEE d MMM", Locale.ENGLISH)
+internal val DESC_FMT = DateTimeFormatter.ofPattern("EEE d MMM", Locale.ENGLISH)
 private val CHART_H = 160.dp
 private val LABEL_H = 18.dp
 
-private fun trendText(t: Trend) = (if (t.up) "▲ " else "▼ ") + "${t.pct}%"
+internal fun trendText(t: Trend) = (if (t.up) "▲ " else "▼ ") + "${t.pct}%"
 
 @Composable
 fun UsageTab(
@@ -180,98 +165,6 @@ fun UsageTab(
                 pkg, labels[pkg] ?: pkg, time, target?.limitMin, locked,
                 history.apps[pkg], canSetLimit = target == null && pkg !in unpickable, onSetLimit = { onSetLimit(pkg) },
             )
-        }
-    }
-}
-
-@Composable
-private fun AppUsageRow(
-    pkg: String,
-    label: String,
-    time: Duration,
-    limitMin: Int?,
-    locked: Boolean,
-    hist: AppHistory?,
-    canSetLimit: Boolean,
-    onSetLimit: () -> Unit,
-) {
-    val c = LocalEnoughColors.current
-    val accent = if (locked) c.red else c.fg
-    EnoughRow {
-        AppIcon(pkg, blocked = locked)
-        Column(Modifier.weight(1f)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Txt(label.uppercase(), EnoughType.name, accent, Modifier.weight(1f), maxLines = 1)
-                Txt(dur(time), EnoughType.num.copy(fontSize = 14.sp), accent)
-            }
-            Row(Modifier.fillMaxWidth().padding(top = 6.dp), verticalAlignment = Alignment.Bottom) {
-                Box(Modifier.weight(1f)) {
-                    if (limitMin != null) {
-                        Row(Modifier.border(2.dp, accent).padding(horizontal = 8.dp, vertical = 3.dp), verticalAlignment = Alignment.CenterVertically) {
-                            if (locked) {
-                                LockIcon(accent, 12.dp)
-                                Spacer(Modifier.width(6.dp))
-                            }
-                            Txt("LIMIT ${durMin(limitMin)}", EnoughType.label.copy(fontSize = 11.sp), accent)
-                        }
-                    } else if (canSetLimit) {
-                        Box(
-                            Modifier.heightIn(min = 48.dp).plainClickable(role = Role.Button, onClick = onSetLimit),
-                            contentAlignment = Alignment.CenterStart,
-                        ) { Txt(S.PLUS_SET_LIMIT, EnoughType.label, c.dim) }
-                    }
-                }
-                if (hist != null) {
-                    Sparkline(hist.last7, accent)
-                    val t = hist.trend
-                    Box(Modifier.width(52.dp).padding(start = 6.dp)) {
-                        if (t != null) {
-                            Txt(
-                                trendText(t), EnoughType.label.copy(fontSize = 11.sp, textAlign = TextAlign.End),
-                                if (t.up && limitMin != null) c.red else c.fg, Modifier.fillMaxWidth(),
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun Sparkline(values: List<Duration>, color: Color, height: Dp = 26.dp) {
-    val max = values.maxOrNull()?.takeIf { !it.isZero } ?: Duration.ofMinutes(1)
-    Row(Modifier.height(height), horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.Bottom) {
-        values.forEach { v ->
-            val h = maxOf(2f, height.value * (v.toMillis().toFloat() / max.toMillis())).dp
-            Box(Modifier.width(7.dp).height(h).background(color))
-        }
-    }
-}
-
-/** Standalone Usage screen, opened from the Home "USAGE →" link. */
-@Composable
-fun UsageScreen(
-    state: UsageUiState,
-    onSetLimit: (String) -> Unit,
-    onBack: () -> Unit,
-) {
-    val history = state.history
-    val noAccess = state.noAccess
-    val labels = state.labels
-    val config = state.config
-    val used = state.used
-    val now = state.now
-    val unpickable = state.unpickable
-    val c = LocalEnoughColors.current
-    Column(Modifier.fillMaxSize().padding(horizontal = Dims.Pad)) {
-        BackHeader(S.USAGE_TITLE, onBack)
-        Txt(
-            DESC_FMT.format(now.atZone(ZoneId.systemDefault())).uppercase(),
-            EnoughType.label, c.fg, Modifier.padding(top = 6.dp),
-        )
-        Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
-            UsageTab(history, noAccess, labels, config, used, now, unpickable, onSetLimit)
         }
     }
 }

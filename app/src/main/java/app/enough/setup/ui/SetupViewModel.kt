@@ -89,3 +89,11 @@ class SetupViewModel(
         const val K_ACCOUNTS = "accountsConfirmed"
     }
 }
+
+data class PhoneSetupUi(
+    val wifi: Boolean,
+    val adbWifi: Boolean,
+    val accountsConfirmed: Boolean,
+    val view: SetupView,
+    val notifDenied: Boolean = false,
+)
