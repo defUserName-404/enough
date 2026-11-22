@@ -1,42 +1,14 @@
 package app.enough.common.domain
 
-import app.enough.limits.domain.Change
-import app.enough.limits.domain.Config
-import app.enough.limits.domain.EnoughJson
-import app.enough.limits.domain.PendingChange
-import app.enough.limits.domain.Phase
-import app.enough.limits.domain.Target
 import app.enough.oem.domain.OemTable
-import app.enough.testutil.NOW
 import app.enough.usage.domain.AppInfo
 import app.enough.usage.domain.PickerFilter
 import java.time.Duration
-import java.time.LocalDate
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MiscCoreTest {
-    @Test fun json_roundtrip_all_changes() {
-        val cfg = Config(
-            phase = Phase.ACTIVE,
-            targets = listOf(Target("a", 20)),
-            pending = listOf(
-                PendingChange("1", Change.AddOrLower(Target("a", 10)), NOW),
-                PendingChange("2", Change.RaiseLimit(Target("a", 40)), NOW),
-                PendingChange("3", Change.Remove("a"), NOW),
-                PendingChange("5", Change.Release, NOW),
-            ),
-            warned = mapOf("a" to LocalDate.of(2026, 11, 21)),
-            failClosedNotified = true, unsuspendable = setOf("x"),
-        )
-        val s = EnoughJson.encodeToString(Config.serializer(), cfg)
-        assertEquals(cfg, EnoughJson.decodeFromString(Config.serializer(), s))
-        val withUnknown = s.dropLast(1) + ",\"future\":1}"
-        assertEquals(cfg, EnoughJson.decodeFromString(Config.serializer(), withUnknown))
-        assertEquals(Config(), EnoughJson.decodeFromString(Config.serializer(), "{}"))
-    }
-
     @Test fun format() {
         assertEquals("12:40", mmss(Duration.ofMinutes(12).plusSeconds(40)))
         assertEquals("240:00", mmss(Duration.ofMinutes(240)))

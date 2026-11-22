@@ -7,9 +7,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import app.enough.limits.android.entity.ConfigEntity
+import app.enough.limits.android.entity.EnoughJson
+import app.enough.limits.android.entity.toDomain
+import app.enough.limits.android.entity.toEntity
 import app.enough.limits.domain.Config
 import app.enough.limits.domain.ConfigPort
-import app.enough.limits.domain.EnoughJson
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
@@ -26,17 +29,21 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 
+/** config.json <-> domain [Config], via [ConfigEntity] (the stored shape). */
+internal fun decodeConfig(s: String): Config = EnoughJson.decodeFromString(ConfigEntity.serializer(), s).toDomain()
+internal fun encodeConfig(c: Config): String = EnoughJson.encodeToString(ConfigEntity.serializer(), c.toEntity())
+
 object ConfigSerializer : Serializer<Config> {
     override val defaultValue = Config()
 
     override suspend fun readFrom(input: InputStream): Config = try {
-        EnoughJson.decodeFromString(Config.serializer(), input.readBytes().decodeToString())
+        decodeConfig(input.readBytes().decodeToString())
     } catch (e: SerializationException) {
         throw CorruptionException("config.json unreadable", e)
     }
 
     override suspend fun writeTo(t: Config, output: OutputStream) {
-        output.write(EnoughJson.encodeToString(Config.serializer(), t).encodeToByteArray())
+        output.write(encodeConfig(t).encodeToByteArray())
     }
 }
 
@@ -51,7 +58,7 @@ class ConfigBackup(private val main: File) {
     private val tmp = File(main.parentFile, main.name + ".bak.tmp")
 
     private fun decodes(bytes: ByteArray): Boolean = try {
-        EnoughJson.decodeFromString(Config.serializer(), bytes.decodeToString()); true
+        decodeConfig(bytes.decodeToString()); true
     } catch (e: SerializationException) {
         false
     }
@@ -67,7 +74,7 @@ class ConfigBackup(private val main: File) {
 
     @Synchronized
     fun restore(cause: CorruptionException): Config = try {
-        EnoughJson.decodeFromString(Config.serializer(), bak.readBytes().decodeToString())
+        decodeConfig(bak.readBytes().decodeToString())
     } catch (e: IOException) {
         cause.addSuppressed(e); throw cause
     } catch (e: SerializationException) {

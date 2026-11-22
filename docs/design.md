@@ -11,7 +11,7 @@ Feature-first. Each feature has up to three layers:
 ```
 EnoughApp, MainActivity, Controller   app shell, wires ports to adapters
 admin/     EnoughAdminReceiver        PINNED: device owner is bound to app.enough/.admin.EnoughAdminReceiver; never move it
-limits/    domain: Config, Target, Change, ChangePolicy, ConfigPort · android: ConfigStore · ui: EditLimitSheet, OnboardingAppsScreen
+limits/    domain: Config, Target, Change, ChangePolicy, ConfigPort · android: ConfigStore, entity/ConfigEntity (stored JSON shape + mappers) · ui: EditLimitSheet, OnboardingAppsScreen
 enforce/   domain: Enforcer, Ticker, Releaser, DevicePort, NotifyPort · android: EnforcementService, BootReceiver, Notifier, Policy · ui: StatusScreens
 usage/     domain: UsageFolder, UsageHistory, PickerFilter, UsagePort · android: UsageReader, HistoryReader, AppCatalog · ui: UsageTab
 setup/     domain: SetupMachine, SetupRunner, SelfSetup, Adb/Discovery/SetupEnv ports · android: AdbClient, NsdDiscovery, SetupService, … · ui: OnboardingLockScreen
